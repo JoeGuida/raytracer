@@ -6,7 +6,8 @@
 class Object {
 public:
 
-	bool intersects(const Ray& ray);
+	Object() {}
+	virtual bool intersects(const Ray& ray) = 0;
 
 };
 
