@@ -17,10 +17,13 @@ void Scene::RayTrace() {
 
 Color Scene::Trace(int i, int j) {
 	Ray ray(camera.position, Vector3(j, i, camera.direction.z));
+	Sphere* hit;
 
-	Object* hit = nullptr;
-	for (std::list<Object>::iterator i = objects.begin(); i != objects.end(); i++) {
-		if (*i.intersects(ray))
-			hit = *i;
+	for (Sphere& sphere : spheres) {
+		if (sphere.intersects(ray))
+		{
+			return sphere.material.color;
+		}
 	}
+	return Color(100, 100, 100);
 }
