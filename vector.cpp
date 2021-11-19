@@ -1,7 +1,9 @@
 #include "vector.h"
 #include <cmath>
 
-/* Vector2 */
+/* 
+* Vector2 
+*/
 
 inline Vector2 Vector2::operator +(const Vector2& v) const {
 	return Vector2(x + v.x, y + v.y);
@@ -86,7 +88,9 @@ inline float Vector2::Magnitude() {
 	return sqrtf(x * x + y * y);
 }
 
-/* Vector3 */
+/*
+* Vector3 
+*/
 
 inline Vector3 Vector3::operator +(const Vector3& v) const {
 	return Vector3(x + v.x, y + v.y, z + v.z);
@@ -177,8 +181,21 @@ inline void Vector3::Normalize() {
 	z /= m;
 }
 
-inline float Vector3::Magnitude() {
+inline float Vector3::Magnitude() const {
 	return sqrtf(x * x + y * y + z * z);
+}
+
+inline Vector2 Normalized(const Vector2& v) {
+	float m = Magnitude(v);
+	return Vector2(v.x / m, v.y / m);
+}
+
+/*
+* Nonmember Functions
+*/
+
+inline Vector3 Normalized(const Vector3& v) {
+
 }
 
 inline float Magnitude(const Vector2& v) {

@@ -76,10 +76,12 @@ typedef struct Vector3 {
 	inline void operator /=(float s);
 
 	inline void Normalize();
-	inline float Magnitude();
+	inline float Magnitude() const;
 
 } Vector3;
 
+inline Vector2 Normalized(const Vector2& v);
+inline Vector3 Normalized(const Vector3& v);
 inline float Magnitude(const Vector2& v);
 inline float Magnitude(const Vector3& v);
 inline float Dot(const Vector2& a, const Vector2& b);
