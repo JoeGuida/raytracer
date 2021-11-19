@@ -12,6 +12,7 @@
 class Scene {
 private: 
 	std::list<Object> objects;
+	std::list<Sphere> spheres;
 	Camera camera;
 
 public:
