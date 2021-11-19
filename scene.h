@@ -4,8 +4,10 @@
 #include <list>
 #include <fstream>
 #include "object.h"
+#include "sphere.h"
 #include "camera.h"
 #include "vector.h"
+#include "color.h"
 
 class Scene {
 private: 
@@ -28,11 +30,12 @@ public:
 		camera = c;
 	}
 
-	void Add(const Object& shape) {
-		objects.emplace_back(shape);
+	void Add(const Sphere& sphere) {
+		objects.emplace_back(sphere);
 	}
 
-	void Trace(int i, int j);
+	void RayTrace();
+	Color Trace(int i, int j);
 };
 
 #endif
