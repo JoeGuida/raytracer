@@ -3,22 +3,24 @@
 
 #include "object.h"
 
-class Sphere : virtual Object {
+class Sphere : public Object {
 public:
-	Vector3 position;
+	Vector3 center;
 	float radius;
 
 	Sphere() {
-		position = Vector3();
+		center = Vector3();
 		radius = 1;
+		material = Material();;
 	}
 
-	Sphere(Vector3 p, float r) {
-		position = p;
+	Sphere(Vector3 p, float r, Material m) {
+		center = p;
 		radius = r;
+		material = m;
 	}
 
-	virtual bool intersects(const Ray& ray);
+	bool intersects(const Ray& ray) const;
 };
 
 #endif
