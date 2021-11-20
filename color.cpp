@@ -1,83 +1,34 @@
 #include "color.h"
 
-inline Color Color::operator +(const Color& c) const {
-	return Color(r + c.r, g + c.g, b + c.b);
+Color operator +(const Color& a, const Color& b) {
+	return Color(a.r + b.r, a.g + b.g, a.b + b.b);
 }
 
-inline Color Color::operator +(float s) const {
-	return Color(r + s, g + s, b + s);
+Color operator +(const Color& c, float s) {
+	return Color(c.r + s, c.g + s, c.b + s);
 }
 
-inline Color Color::operator -(const Color& c) const {
-	return Color(r - c.r, g - c.g, b - c.b);
+Color operator -(const Color& a, const Color& b) {
+	return Color(a.r - b.r, a.g - b.g, a.b - b.b);
 }
 
-inline Color Color::operator -(float s) const {
-	return Color(r - s, g - s, b - s);
+Color operator -(const Color& c, float s) {
+	return Color(c.r - s, c.g - s, c.b - s);
 }
 
-inline Color Color::operator *(const Color& c) const {
-	return Color(r * c.r, g * c.g, b * c.b);
+Color operator *(const Color& a, const Color& b) {
+	return Color(a.r * b.r, a.g * b.g, a.b * b.b);
 }
 
-inline Color Color::operator *(float s) const {
-	return Color(r * s, g * s, b * s);
+Color operator *(const Color& c, float s) {
+	return Color(c.r * s, c.g * s, c.b * s);
 }
 
-inline Color Color::operator /(const Color& c) const {
-	return Color(r * (1.0f / c.r), g * (1.0f / c.g), b * (1.0f / c.b));
+Color operator /(const Color& a, const Color& b) {
+	return Color(a.r * (1.f / b.r), a.g * (1.f / b.g), a.b * (1.f / b.b));
 }
 
-inline Color Color::operator /(float s) const {
-	s = 1.0f / s;
-	return Color(r * s, g * s, b * s);
-}
-
-inline void Color::operator +=(const Color& c) {
-	r += c.r;
-	g += c.g;
-	b += c.b;
-}
-
-inline void Color::operator +=(float s) {
-	r += s;
-	g += s;
-	b += s;
-}
-
-inline void Color::operator -=(const Color& c) {
-	r -= c.r;
-	g -= c.g;
-	b -= c.b;
-}
-
-inline void Color::operator -=(float s) {
-	r -= s;
-	g -= s;
-	b -= s;
-}
-
-inline void Color::operator *=(const Color& c) {
-	r *= c.r;
-	g *= c.g;
-	b *= c.b;
-}
-
-inline void Color::operator *=(float s) {
-	r *= s;
-	g *= s;
-	b *= s;
-}
-
-inline void Color::operator /=(const Color& c) {
-	r *= (1.0f / c.r);
-	g *= (1.0f / c.g);
-	b *= (1.0f / c.b);
-}
-
-inline void Color::operator /=(float s) {
-	s = 1.0f / s;
-	r *= s;
-	g *= s;
-	b *= s;
+Color operator /(const Color& c, float s) {
+	s = 1.f / s;
+	return Color(c.r * s, c.g * s, c.b * s);
 }

@@ -19,24 +19,15 @@ typedef struct Color {
 		b = z;
 	}
 
-	inline Color operator +(const Color& c) const;
-	inline Color operator +(float s) const;
-	inline Color operator -(const Color& c) const;
-	inline Color operator -(float s) const;
-	inline Color operator *(const Color& c) const;
-	inline Color operator *(float s) const;
-	inline Color operator /(const Color& c) const;
-	inline Color operator /(float s) const;
-
-	inline void operator +=(const Color& c);
-	inline void operator +=(float s);
-	inline void operator -=(const Color& c);
-	inline void operator -=(float s);
-	inline void operator *=(const Color& c);
-	inline void operator *=(float s);
-	inline void operator /=(const Color& c);
-	inline void operator /=(float s);
-
 } Color;
+
+Color operator +(const Color& a, const Color& b);
+Color operator +(const Color& c, float s);
+Color operator -(const Color& a, const Color& b);
+Color operator -(const Color& c, float s);
+Color operator *(const Color& a, const Color& b);
+Color operator *(const Color& c, float s);
+Color operator /(const Color& a, const Color& b);
+Color operator /(const Color& c, float s);
 
 #endif
