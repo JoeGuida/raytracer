@@ -3,15 +3,11 @@
 
 #include <list>
 #include <fstream>
-#include "object.h"
 #include "sphere.h"
 #include "camera.h"
-#include "vector.h"
-#include "color.h"
 
 class Scene {
 private: 
-	std::list<Object> objects;
 	std::list<Sphere> spheres;
 	Camera camera;
 
@@ -32,7 +28,7 @@ public:
 	}
 
 	void Add(const Sphere& sphere) {
-		objects.emplace_back(sphere);
+		spheres.emplace_back(sphere);
 	}
 
 	void RayTrace();
