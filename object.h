@@ -9,7 +9,7 @@ class Object {
 public:
 	Material material;
 
-	virtual bool intersects(const Ray& ray) = 0;
+	virtual bool intersects(const Ray& ray) const = 0;
 
 };
 
