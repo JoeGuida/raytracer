@@ -1,4 +1,5 @@
 #include "sphere.h"
+#include <cmath>
 
 bool Sphere::intersects(const Ray& ray) const {
 	// first we need a vector from the ray to the center of the circle

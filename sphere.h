@@ -1,9 +1,9 @@
 #ifndef _SPHERE_H_
 #define _SPHERE_H_
 
-#include "object.h"
+#include "ray.h"
 
-class Sphere : public Object {
+class Sphere {
 public:
 	Vector3 center;
 	float radius;
@@ -11,13 +11,11 @@ public:
 	Sphere() {
 		center = Vector3();
 		radius = 1;
-		material = Material();;
 	}
 
-	Sphere(Vector3 p, float r, Material m) {
+	Sphere(Vector3 p, float r) {
 		center = p;
 		radius = r;
-		material = m;
 	}
 
 	bool intersects(const Ray& ray) const;
