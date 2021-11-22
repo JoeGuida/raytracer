@@ -98,9 +98,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="canvas.cpp" />
     <ClCompile Include="color.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matrix.cpp" />
+    <ClCompile Include="scene.cpp" />
     <ClCompile Include="sphere.cpp" />
     <ClCompile Include="vector.cpp" />
   </ItemGroup>
@@ -109,6 +111,7 @@
     <ClInclude Include="color.h" />
     <ClInclude Include="matrix.h" />
     <ClInclude Include="ray.h" />
+    <ClInclude Include="scene.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="vector.h" />
     <ClInclude Include="viewport.h" />
