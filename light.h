@@ -2,6 +2,7 @@
 #define _LIGHT_H_
 
 #include "color.h"
+#include "vector.h"
 
 typedef struct AmbientLight {
 	
@@ -12,6 +13,7 @@ typedef struct AmbientLight {
 
 typedef struct DirectionalLight {
 
+	Vector3 direction;
 	Color color;
 	float intensity;
 
@@ -19,6 +21,7 @@ typedef struct DirectionalLight {
 
 typedef struct PointLight {
 
+	Vector3 position;
 	Color color;
 	float intensity;
 
