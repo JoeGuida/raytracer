@@ -11,6 +11,11 @@ typedef struct Canvas {
 	int width;
 	int height;
 
+	Canvas() {
+		width = 256;
+		height = 256;
+	}
+
 	Canvas(int x, int y) {
 		width = x;
 		height = y;
@@ -18,15 +23,7 @@ typedef struct Canvas {
 
 } Canvas;
 
-Vector3 CanvasToViewport(Canvas c, Viewport v, int x, int y, int d) {
-	float vx = x * (float(v.width) / float(c.width));
-	float vy = y * (float(v.height) / float(c.height));
-	return Vector3(vx, vy, d);
-}
-
-void PutPixel(int x, int y, Color c, std::ofstream& filestream) {
-	if(filestream.is_open())
-		filestream << c.r << ' ' << c.g << ' ' << c.b << std::endl;
-}
+Vector3 CanvasToViewport(Canvas c, Viewport v, int x, int y, int d);
+void PutPixel(int x, int y, Color c, std::ofstream& filestream);
 
 #endif
