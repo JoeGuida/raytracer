@@ -4,6 +4,7 @@
 #include "sphere.h"
 #include "canvas.h"
 #include "viewport.h"
+#include "hit.h"
 #include <vector>
 
 typedef struct Scene {
@@ -25,7 +26,8 @@ typedef struct Scene {
 		spheres.push_back(sphere);
 	}
 
-	Color TraceRay(const Ray& ray, float tmin, float tmax);
+	Color TraceRay(const Ray& ray, Hit& hit, float tmin, float tmax);
+	Color Diffuse(const Vector3& point);
 
 } Scene;
 

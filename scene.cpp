@@ -1,6 +1,6 @@
 #include "scene.h"
 
-Color Scene::TraceRay(const Ray& ray, float tmin, float tmax) {
+Color Scene::TraceRay(const Ray& ray, Hit& hit, float tmin, float tmax) {
 	float closest_t = INFINITY;
 	Sphere* closestSphere = NULL;
 	for (Sphere& sphere : spheres) {
@@ -19,5 +19,7 @@ Color Scene::TraceRay(const Ray& ray, float tmin, float tmax) {
 	if (closestSphere == NULL) {
 		return Color(255, 255, 255);
 	}
+
+	hit.point = ray.origin + ray.direction * closest_t;
 	return closestSphere->color;
 }
