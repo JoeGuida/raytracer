@@ -4,27 +4,43 @@
 #include "color.h"
 #include "vector.h"
 
-typedef struct AmbientLight {
-	
-	Color color;
-	float intensity;
-
-} AmbientLight;
-
-typedef struct DirectionalLight {
-
-	Vector3 direction;
-	Color color;
-	float intensity;
-
-} DirectionalLight;
-
-typedef struct PointLight {
-
-	Vector3 position;
-	Color color;
-	float intensity;
-
+enum LightTypes {
+	AMBIENT,
+	DIRECTIONAL,
+	POINT
 };
+
+typedef struct Light {
+
+	Color color;
+	Vector3 direction;
+	Point position;
+	float intensity;
+	int type;
+
+	// Ambient Light
+	Light(float i, Color c) {
+		type = AMBIENT;
+		intensity = i;
+		color = c;
+	}
+
+	// Directional Light 
+	Light(float i, Color c, Vector3 d) {
+		type = DIRECTIONAL;
+		intensity = i;
+		color = c;
+		direction = d;
+	}
+
+	// Point Light
+	Light(Point p, float i, Color c) {
+		type = POINT;
+		intensity = i;
+		color = c;
+		position = p;
+	}
+
+} Light;
 
 #endif
