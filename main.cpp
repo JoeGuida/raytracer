@@ -1,12 +1,6 @@
-#include "canvas.h"
-#include "viewport.h"
-#include "ray.h"
-#include "color.h"
-#include "sphere.h"
 #include "scene.h"
 #include <iostream>
 #include <fstream>
-#include <vector>
 
 int main() {
 	// Camera settings
@@ -18,13 +12,17 @@ int main() {
 	Scene scene(canvas, viewport);
 	
 	// Camera for casting rays into the scene
-	Ray camera(Vector3(0, 0, 0), Vector3(0, 0, 1));
+	Ray camera(Point(0, 0, 0), Vector3(0, 0, 1));
 
 	// Create some spheres
-	std::vector<Sphere> spheres;
-	scene.Add(Sphere(Vector3(0, -1, 3), 1, Color(255, 0, 0)));
-	scene.Add(Sphere(Vector3(2, 0, 4), 1, Color(0, 0, 255)));
-	scene.Add(Sphere(Vector3(-2, 0, 4), 1, Color(0, 255, 0)));
+	scene.Add(Sphere(Point(0, -1, 3), 1, Color(255, 0, 0)));
+	scene.Add(Sphere(Point(2, 0, 4), 1, Color(0, 0, 255)));
+	scene.Add(Sphere(Point(-2, 0, 4), 1, Color(0, 255, 0)));
+
+	// Create some lights
+	scene.Add(Light(0.5f, Color(255, 255, 255)));
+	scene.Add(Light(Point(2, 1, 0), 0.6f, Color(255, 255, 255)));
+	scene.Add(Light(0.2f, Color(255, 255, 255), Vector3(1, 4, 4)));
 
 	// Main Loop
 	std::ofstream image;
@@ -32,8 +30,10 @@ int main() {
 	image << "P3\n" << canvas.width << ' ' << canvas.height << "\n255\n";
 	for (int y = canvas.height / 2; y > -canvas.height / 2; y--) {
 		for (int x = -canvas.width / 2; x < canvas.width / 2; x++) {
+			Hit hit;
+
 			Vector3 direction = CanvasToViewport(canvas, viewport, x, y, camera.direction.z);
-			Color color = scene.TraceRay(Ray(camera.origin, direction), 1, INFINITY);
+			Color color = scene.TraceRay(Ray(camera.origin, direction), hit, 1, INFINITY);
 			PutPixel(x, y, color, image);
 		}
 	}
