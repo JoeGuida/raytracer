@@ -109,7 +109,10 @@
   <ItemGroup>
     <ClInclude Include="canvas.h" />
     <ClInclude Include="color.h" />
+    <ClInclude Include="hit.h" />
+    <ClInclude Include="light.h" />
     <ClInclude Include="matrix.h" />
+    <ClInclude Include="point.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="sphere.h" />
