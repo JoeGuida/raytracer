@@ -57,6 +57,12 @@ Vector2 Reject(const Vector2& a, const Vector2& b) {
 	return a - Project(a, b);
 }
 
+float Angle(const Vector2& a, const Vector2& b) {
+	float numerator = Dot(a, b);
+	float denominator = Magnitude(a) * Magnitude(b);
+	return acos(numerator / denominator);
+}
+
 Vector3 operator +(const Vector3& a, const Vector3& b) {
 	return Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
 }
@@ -117,4 +123,10 @@ Vector3 Project(const Vector3& a, const Vector3& b) {
 
 Vector3 Reject(const Vector3& a, const Vector3& b) {
 	return a - Project(a, b);
+}
+
+float Angle(const Vector3& a, const Vector3& b) {
+	float numerator = Dot(a, b);
+	float denominator = Magnitude(a) * Magnitude(b);
+	return acos(numerator / denominator);
 }

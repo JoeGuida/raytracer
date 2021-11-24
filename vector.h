@@ -52,6 +52,7 @@ float Magnitude(const Vector2& v);
 float Dot(const Vector2& a, const Vector2& b);
 Vector2 Project(const Vector2& a, const Vector2& b);
 Vector2 Reject(const Vector2& a, const Vector2& b);
+float Angle(const Vector2& a, const Vector2& b);
 
 Vector3 operator +(const Vector3& a, const Vector3& b);
 Vector3 operator +(const Vector3& v, float s);
@@ -68,5 +69,6 @@ float Dot(const Vector3& a, const Vector3& b);
 Vector3 Cross(const Vector3& a, const Vector3& b);
 Vector3 Project(const Vector3& a, const Vector3& b);
 Vector3 Reject(const Vector3& a, const Vector3& b);
+float Angle(const Vector3& a, const Vector3& b);
 
 #endif
