@@ -6,23 +6,23 @@
 
 class Sphere {
 public:
-	Vector3 center;
+	Point center;
 	float radius;
 	Color color;
 
 	Sphere() {
-		center = Vector3();
+		center = Point();
 		radius = 1;
 		color = Color(255, 0, 0);
 	}
 
-	Sphere(Vector3 p, float r, Color c) {
+	Sphere(Point p, float r, Color c) {
 		center = p;
 		radius = r;
 		color  = c;
 	}
 
-	float Sphere::intersects(const Ray& ray, float* t1, float* t2) const;
+	float intersects(const Ray& ray, float* t1, float* t2) const;
 };
 
 #endif

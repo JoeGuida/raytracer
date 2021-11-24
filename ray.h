@@ -2,18 +2,19 @@
 #define _RAY_H_
 
 #include "vector.h"
+#include "point.h"
 
 typedef struct Ray {
 
-	Vector3 origin;
+	Point origin;
 	Vector3 direction;
 
 	Ray() {
-		origin = Vector3();
+		origin = Point();
 		direction = Vector3();
 	}
 
-	Ray(Vector3 o, Vector3 d) {
+	Ray(Point o, Vector3 d) {
 		origin = o;
 		direction = Normalized(d);
 	}

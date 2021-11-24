@@ -2,10 +2,11 @@
 #define _HIT_H_
 
 #include "vector.h"
+#include "point.h"
 
 typedef struct Hit {
 
-	Vector3 point;
+	Point point;
 	Vector3 normal;
 
 } Hit;
