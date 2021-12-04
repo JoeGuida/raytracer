@@ -17,6 +17,10 @@ Vector2 operator -(const Vector2& v, float s) {
 	return Vector2(v.x - s, v.y - s);
 }
 
+Vector2 operator -(const Vector2& v) {
+	return v * -1;
+}
+
 Vector2 operator *(const Vector2& a, const Vector2& b) {
 	return Vector2(a.x * b.x, a.y * b.y);
 }
@@ -57,6 +61,10 @@ Vector2 Reject(const Vector2& a, const Vector2& b) {
 	return a - Project(a, b);
 }
 
+Vector2 Reflect(const Vector2& a, const Vector2& b) {
+	return a - Project(a, b) * 2;
+}
+
 float Angle(const Vector2& a, const Vector2& b) {
 	float numerator = Dot(a, b);
 	float denominator = Magnitude(a) * Magnitude(b);
@@ -77,6 +85,10 @@ Vector3 operator -(const Vector3& a, const Vector3& b) {
 
 Vector3 operator -(const Vector3& v, float s) {
 	return Vector3(v.x - s, v.y - s, v.z - s);
+}
+
+Vector3 operator -(const Vector3& v) {
+	return v * -1;
 }
 
 Vector3 operator *(const Vector3& a, const Vector3& b) {
@@ -123,6 +135,10 @@ Vector3 Project(const Vector3& a, const Vector3& b) {
 
 Vector3 Reject(const Vector3& a, const Vector3& b) {
 	return a - Project(a, b);
+}
+
+Vector3 Reflect(const Vector3& a, const Vector3& b) {
+	return a - Project(a, b) * 2;
 }
 
 float Angle(const Vector3& a, const Vector3& b) {
