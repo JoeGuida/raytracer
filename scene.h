@@ -17,6 +17,8 @@ typedef struct Scene {
 	Canvas canvas;
 	Viewport viewport;
 
+	const Color BACKGROUND_COLOR = Color(255, 255, 255);
+
 	Scene() {
 
 	}
@@ -35,8 +37,9 @@ typedef struct Scene {
 	}
 
 	Color TraceRay(const Ray& ray, Hit& hit, float tmin, float tmax);
-	float ComputeLighting(const Point& point, const Vector3& normal);
-
+	float ComputeLighting(const Hit& hit, const Ray& ray);
+	float Diffuse(const Light& light, const Hit& hit);
+	float Specular(const Light& light, const Hit& hit, const Vector3& v, float s);
 
 } Scene;
 
