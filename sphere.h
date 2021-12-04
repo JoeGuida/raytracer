@@ -3,23 +3,24 @@
 
 #include "ray.h"
 #include "color.h"
+#include "material.h"
 
 class Sphere {
 public:
 	Point center;
 	float radius;
-	Color color;
+	Material material;
 
 	Sphere() {
 		center = Point();
 		radius = 1;
-		color = Color(255, 0, 0);
+		material = Material(Color(255, 0, 0), 10);
 	}
 
-	Sphere(Point p, float r, Color c) {
+	Sphere(Point p, float r, Material m) {
 		center = p;
 		radius = r;
-		color  = c;
+		material = m;
 	}
 
 	float intersects(const Ray& ray, float* t1, float* t2) const;

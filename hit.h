@@ -3,11 +3,13 @@
 
 #include "vector.h"
 #include "point.h"
+#include "material.h"
 
 typedef struct Hit {
 
 	Point point;
 	Vector3 normal;
+	Material material;
 
 } Hit;
 
