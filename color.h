@@ -29,5 +29,6 @@ Color operator *(const Color& a, const Color& b);
 Color operator *(const Color& c, float s);
 Color operator /(const Color& a, const Color& b);
 Color operator /(const Color& c, float s);
+Color ColorfToColori(const Color& c);
 
 #endif

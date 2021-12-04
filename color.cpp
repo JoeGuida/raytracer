@@ -32,3 +32,7 @@ Color operator /(const Color& c, float s) {
 	s = 1.f / s;
 	return Color(c.r * s, c.g * s, c.b * s);
 }
+
+Color ColorfToColori(const Color& c) {
+	return Color(int(c.r), int(c.g), int(c.b));
+}
