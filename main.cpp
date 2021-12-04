@@ -15,14 +15,17 @@ int main() {
 	Ray camera(Point(0, 0, 0), Vector3(0, 0, 1));
 
 	// Create some spheres
-	scene.Add(Sphere(Point(0, -1, 3), 1, Color(255, 0, 0)));
-	scene.Add(Sphere(Point(2, 0, 4), 1, Color(0, 0, 255)));
-	scene.Add(Sphere(Point(-2, 0, 4), 1, Color(0, 255, 0)));
+	Material redMaterial = Material(Color(255, 0, 0), 500);
+	Material blueMaterial = Material(Color(0, 0, 255), 500);
+	Material greenMaterial = Material(Color(0, 255, 0), 10);
+	scene.Add(Sphere(Point(0, -1, 3), 1, redMaterial));
+	scene.Add(Sphere(Point(2, 0, 4), 1, blueMaterial));
+	scene.Add(Sphere(Point(-2, 0, 4), 1, greenMaterial));
 
 	// Create some lights
-	scene.Add(Light(0.5f, Color(255, 255, 255)));
-	scene.Add(Light(Point(2, 1, 0), 0.6f, Color(255, 255, 255)));
-	scene.Add(Light(0.2f, Color(255, 255, 255), Vector3(1, 4, 4)));
+	scene.Add(Light(0.2f, Color(255, 255, 255)));
+	scene.Add(Light(Point(2, 1, 0), 0.8f, Color(255, 255, 255)));
+	scene.Add(Light(0.2f, Color(255, 255, 255), Vector3(1, 0, 4)));
 
 	// Main Loop
 	std::ofstream image;
@@ -31,7 +34,6 @@ int main() {
 	for (int y = canvas.height / 2; y > -canvas.height / 2; y--) {
 		for (int x = -canvas.width / 2; x < canvas.width / 2; x++) {
 			Hit hit;
-
 			Vector3 direction = CanvasToViewport(canvas, viewport, x, y, camera.direction.z);
 			Color color = scene.TraceRay(Ray(camera.origin, direction), hit, 1, INFINITY);
 			PutPixel(x, y, color, image);
