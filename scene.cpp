@@ -4,7 +4,7 @@
 // Determines if the ray hits any object in the scene
 // gets the point of the closest object hit
 // computes the lighting at the point and returns the color
-Color Scene::TraceRay(const Ray& ray, Hit& hit, float tmin, float tmax) {
+Colori Scene::TraceRay(const Ray& ray, Hit& hit, float tmin, float tmax) {
 	float closestT = INFINITY;
 	Sphere* closestSphere = NULL;
 
@@ -31,16 +31,20 @@ Color Scene::TraceRay(const Ray& ray, Hit& hit, float tmin, float tmax) {
 	hit.normal = Normalized(hit.point - closestSphere->center);
 	hit.material = closestSphere->material;
 
-	Color result = closestSphere->material.color * ComputeLighting(hit, ray);
-	return ColorfToColori(result);
-
+	Colorf result = closestSphere->material.color * ComputeLighting(hit, ray);
+	return Colori(result);
 }
 
 // Computes the lighting at a hit point
 // for each type of lighting and returns the value (0-1.0f)
+// lighting equation is ambient + sum(diffuse + specular)
 float Scene::ComputeLighting(const Hit& hit, const Ray& ray) {
 	float i = 0;
+
 	for (const Light& light : lights) {
+		if (light.type == AMBIENT)
+			i += light.intensity;
+
 		float diffuse = Diffuse(light, hit);
 		float specular = Specular(light, hit, -ray.direction, hit.material.specular);
 		i += (diffuse + specular);
@@ -57,19 +61,14 @@ float Scene::Diffuse(const Light& light, const Hit& hit) {
 	float diffuse = 0;
 	Vector3 l;
 
-	if (light.type == AMBIENT) {
-		diffuse += light.intensity;
-	}
-	else {
-		if (light.type == DIRECTIONAL) 
-			l = Normalized(light.direction);
-		else if (light.type == POINT) 
-			l = Normalized(light.position - hit.point);
+	if (light.type == DIRECTIONAL) 
+		l = Normalized(light.direction);
+	else if (light.type == POINT) 
+		l = Normalized(light.position - hit.point);
 
-		float nDotl = Dot(hit.normal, -l);
-		if (nDotl > 0) {
-			diffuse += light.intensity * Angle(hit.normal, -l);
-		}
+	float nDotl = Dot(hit.normal, -l);
+	if (nDotl > 0) {
+		diffuse += light.intensity * Angle(hit.normal, -l);
 	}
 
 	return diffuse;
@@ -93,12 +92,8 @@ float Scene::Specular(const Light& light, const Hit& hit, const Vector3& v, floa
 	else
 		return 0;
 
-
-	//Vector3 r = Reflect(l, hit.normal);
-	Vector3 twoN = hit.normal * 2;
 	Vector3 r = Reflect(l, hit.normal);
 	float rDotV = Dot(r, v);
-
 	if(rDotV > 0)
 		specular = powf(cos(Angle(r, v)), s);
 	

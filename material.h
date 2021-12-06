@@ -5,15 +5,15 @@
 
 typedef struct Material {
 
-	Color color;
+	Colorf color;
 	float specular;
 
 	Material() {
-		color = Color(255, 255, 255);
+		color = Colorf(255, 255, 255);
 		specular = 10;
 	}
 
-	Material(Color c, float s) {
+	Material(Colorf c, float s) {
 		color = c;
 		specular = s;
 	}
