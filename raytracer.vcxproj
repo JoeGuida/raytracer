@@ -98,27 +98,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="canvas.cpp" />
-    <ClCompile Include="color.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="matrix.cpp" />
-    <ClCompile Include="scene.cpp" />
-    <ClCompile Include="sphere.cpp" />
-    <ClCompile Include="vector.cpp" />
+    <ClCompile Include="src/source/canvas.cpp" />
+    <ClCompile Include="src/source/color.cpp" />
+    <ClCompile Include="src/source/main.cpp" />
+    <ClCompile Include="src/source/matrix.cpp" />
+    <ClCompile Include="src/source/scene.cpp" />
+    <ClCompile Include="src/source/sphere.cpp" />
+    <ClCompile Include="src/source/vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="canvas.h" />
-    <ClInclude Include="color.h" />
-    <ClInclude Include="hit.h" />
-    <ClInclude Include="light.h" />
-    <ClInclude Include="material.h" />
-    <ClInclude Include="matrix.h" />
-    <ClInclude Include="point.h" />
-    <ClInclude Include="ray.h" />
-    <ClInclude Include="scene.h" />
-    <ClInclude Include="sphere.h" />
-    <ClInclude Include="vector.h" />
-    <ClInclude Include="viewport.h" />
+    <ClInclude Include="src/headers/canvas.h" />
+    <ClInclude Include="src/headers/color.h" />
+    <ClInclude Include="src/headers/hit.h" />
+    <ClInclude Include="src/headers/light.h" />
+    <ClInclude Include="src/headers/material.h" />
+    <ClInclude Include="src/headers/matrix.h" />
+    <ClInclude Include="src/headers/point.h" />
+    <ClInclude Include="src/headers/ray.h" />
+    <ClInclude Include="src/headers/scene.h" />
+    <ClInclude Include="src/headers/sphere.h" />
+    <ClInclude Include="src/headers/vector.h" />
+    <ClInclude Include="src/headers/viewport.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
