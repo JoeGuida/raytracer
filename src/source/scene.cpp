@@ -1,10 +1,10 @@
-#include "scene.h"
+#include "../headers/scene.h"
 #include <iostream>
 
 // Determines if the ray hits any object in the scene
 // gets the point of the closest object hit
 // computes the lighting at the point and returns the color
-Colori Scene::TraceRay(const Ray& ray, Hit& hit, float tmin, float tmax) {
+Color Scene::TraceRay(const Ray& ray, Hit& hit, float tmin, float tmax) {
 	float closestT = INFINITY;
 	Sphere* closestSphere = NULL;
 
@@ -31,8 +31,8 @@ Colori Scene::TraceRay(const Ray& ray, Hit& hit, float tmin, float tmax) {
 	hit.normal = Normalized(hit.point - closestSphere->center);
 	hit.material = closestSphere->material;
 
-	Colorf result = closestSphere->material.color * ComputeLighting(hit, ray);
-	return Colori(result);
+	Color result = closestSphere->material.color * ComputeLighting(hit, ray);
+	return Color(int(result.r), int(result.g), int(result.b));
 }
 
 // Computes the lighting at a hit point

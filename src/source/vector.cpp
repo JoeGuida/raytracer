@@ -1,4 +1,4 @@
-#include "vector.h"
+#include "../headers/vector.h"
 #include <cmath>
 
 Vector2 operator +(const Vector2& a, const Vector2& b) {

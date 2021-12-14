@@ -14,7 +14,7 @@ public:
 	Sphere() {
 		center = Point();
 		radius = 1;
-		material = Material(Colorf(255, 0, 0), 10);
+		material = Material(Color(255, 0, 0), 10);
 	}
 
 	Sphere(Point p, float r, Material m) {

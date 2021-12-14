@@ -1,4 +1,4 @@
-#include "sphere.h"
+#include "../headers/sphere.h"
 #include <cmath>
 
 float Sphere::intersects(const Ray& ray, float* t1, float* t2) const {

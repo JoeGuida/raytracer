@@ -12,21 +12,21 @@ enum LightTypes {
 
 typedef struct Light {
 
-	Colorf color;
+	Color color;
 	Vector3 direction;
 	Point position;
 	float intensity;
 	int type;
 
 	// Ambient Light
-	Light(float i, Colorf c) {
+	Light(float i, Color c) {
 		type = AMBIENT;
 		intensity = i;
 		color = c;
 	}
 
 	// Directional Light 
-	Light(float i, Colorf c, Vector3 d) {
+	Light(float i, Color c, Vector3 d) {
 		type = DIRECTIONAL;
 		intensity = i;
 		color = c;
@@ -34,7 +34,7 @@ typedef struct Light {
 	}
 
 	// Point Light
-	Light(Point p, float i, Colorf c) {
+	Light(Point p, float i, Color c) {
 		type = POINT;
 		intensity = i;
 		color = c;

@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "../headers/matrix.h"
 
 Matrix2 Matrix2::operator +(float s) const {
 	return Matrix2(n[0][0] + s, n[0][1] + s,

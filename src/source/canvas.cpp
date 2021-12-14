@@ -1,4 +1,4 @@
-#include "canvas.h"
+#include "../headers/canvas.h"
 
 Vector3 CanvasToViewport(Canvas c, Viewport v, int x, int y, int d) {
 	float vx = x * (float(v.width) / float(c.width));
@@ -6,7 +6,7 @@ Vector3 CanvasToViewport(Canvas c, Viewport v, int x, int y, int d) {
 	return Vector3(vx, vy, d);
 }
 
-void PutPixel(int x, int y, Color c, std::ofstream& filestream) {
+void PutPixel(int x, int y, const Color& c, std::ofstream& filestream) {
 	if (filestream.is_open())
 		filestream << c.r << ' ' << c.g << ' ' << c.b << std::endl;
 }
