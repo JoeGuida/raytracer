@@ -48,13 +48,13 @@ Vector2 operator *(const Vector2& v, float s);
 Vector2 operator /(const Vector2& a, const Vector2& b);
 Vector2 operator /(const Vector2& v, float s);
 
-Vector2 Normalized(const Vector2& v);
-float Magnitude(const Vector2& v);
-float Dot(const Vector2& a, const Vector2& b);
-Vector2 Project(const Vector2& a, const Vector2& b);
-Vector2 Reject(const Vector2& a, const Vector2& b);
-Vector2 Reflect(const Vector2& a, const Vector2& b);
-float Angle(const Vector2& a, const Vector2& b);
+Vector2 normalized_vector(const Vector2& v);
+float magnitude(const Vector2& v);
+float dot_product(const Vector2& a, const Vector2& b);
+Vector2 projection(const Vector2& a, const Vector2& b);
+Vector2 rejection(const Vector2& a, const Vector2& b);
+Vector2 reflection(const Vector2& a, const Vector2& b);
+float anlge(const Vector2& a, const Vector2& b);
 
 Vector3 operator +(const Vector3& a, const Vector3& b);
 Vector3 operator +(const Vector3& v, float s);
@@ -66,13 +66,13 @@ Vector3 operator *(const Vector3& v, float s);
 Vector3 operator /(const Vector3& a, const Vector3& b);
 Vector3 operator /(const Vector3& v, float s);
 
-Vector3 Normalized(const Vector3& v);
-float Magnitude(const Vector3& v);
-float Dot(const Vector3& a, const Vector3& b);
-Vector3 Cross(const Vector3& a, const Vector3& b);
-Vector3 Project(const Vector3& a, const Vector3& b);
-Vector3 Reject(const Vector3& a, const Vector3& b);
-Vector3 Reflect(const Vector3& a, const Vector3& b);
-float Angle(const Vector3& a, const Vector3& b);
+Vector3 normalized_vector(const Vector3& v);
+float magnitude(const Vector3& v);
+float dot_product(const Vector3& a, const Vector3& b);
+Vector3 cross_product(const Vector3& a, const Vector3& b);
+Vector3 projection(const Vector3& a, const Vector3& b);
+Vector3 rejection(const Vector3& a, const Vector3& b);
+Vector3 reflection(const Vector3& a, const Vector3& b);
+float angle(const Vector3& a, const Vector3& b);
 
 #endif

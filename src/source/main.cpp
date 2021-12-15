@@ -3,9 +3,6 @@
 #include <fstream>
 
 int main() {
-	// Camera settings
-	const float ASPECT_RATIO = 16.0 / 9.0;
-
 	// Create the scene
 	Canvas canvas(512, 512);
 	Viewport viewport(1, 1);
@@ -14,13 +11,15 @@ int main() {
 	// Camera for casting rays into the scene
 	Ray camera(Point(0, 0, 0), Vector3(0, 0, 1));
 
+	// Create some materials
+	Material red_material = Material(Color(255, 0, 0), 500, 0.2f);
+	Material blue_material = Material(Color(0, 0, 255), 500, 0.3f);
+	Material green_material = Material(Color(0, 255, 0), 10, 0.4f);
+
 	// Create some spheres
-	Material redMaterial = Material(Color(255, 0, 0), 500);
-	Material blueMaterial = Material(Color(0, 0, 255), 500);
-	Material greenMaterial = Material(Color(0, 255, 0), 10);
-	scene.Add(Sphere(Point(0, -1, 3), 1, redMaterial));
-	scene.Add(Sphere(Point(2, 0, 4), 1, blueMaterial));
-	scene.Add(Sphere(Point(-2, 0, 4), 1, greenMaterial));
+	scene.Add(Sphere(Point(0, -1, 3), 1, red_material));
+	scene.Add(Sphere(Point(2, 0, 4), 1, blue_material));
+	scene.Add(Sphere(Point(-2, 0, 4), 1, green_material));
 
 	// Create some lights
 	scene.Add(Light(0.2f, Color(255, 255, 255)));
@@ -34,9 +33,9 @@ int main() {
 	for (int y = canvas.height / 2; y > -canvas.height / 2; y--) {
 		for (int x = -canvas.width / 2; x < canvas.width / 2; x++) {
 			Hit hit;
-			Vector3 direction = CanvasToViewport(canvas, viewport, x, y, camera.direction.z);
-			Color color = scene.TraceRay(Ray(camera.origin, direction), hit, 1, INFINITY);
-			PutPixel(x, y, color, image);
+			Vector3 direction = canvas_to_viewport(canvas, viewport, x, y, camera.direction.z);
+			Color color = scene.trace_ray(Ray(camera.origin, direction), hit, 1, INFINITY, 3);
+			put_pixel(x, y, color, image);
 		}
 	}
 

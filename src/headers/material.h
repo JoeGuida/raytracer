@@ -6,16 +6,19 @@
 typedef struct Material {
 
 	Color color;
-	float specular;
+	float specularity;
+	float reflectivity;
 
 	Material() {
 		color = Color(255, 255, 255);
-		specular = 10;
+		specularity = 10;
+		reflectivity = 1.0f;
 	}
 
-	Material(Color c, float s) {
+	Material(Color c, float s, float r) {
 		color = c;
-		specular = s;
+		specularity = s;
+		reflectivity = r;
 	}
 
 } Material;

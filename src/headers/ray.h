@@ -16,7 +16,7 @@ typedef struct Ray {
 
 	Ray(Point o, Vector3 d) {
 		origin = o;
-		direction = Normalized(d);
+		direction = normalized_vector(d);
 	}
 
 } Ray;
