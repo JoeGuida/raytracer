@@ -34,7 +34,7 @@ int main() {
 		for (int x = -canvas.width / 2; x < canvas.width / 2; x++) {
 			Hit hit;
 			Vector3 direction = canvas_to_viewport(canvas, viewport, x, y, camera.direction.z);
-			Color color = scene.trace_ray(Ray(camera.origin, direction), hit, 1, INFINITY, 3);
+			Color color = scene.trace_ray(Ray(camera.origin, direction), hit, 1, INFINITY, 5);
 			put_pixel(x, y, color, image);
 		}
 	}

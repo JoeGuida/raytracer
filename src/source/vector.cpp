@@ -41,7 +41,10 @@ Vector2 operator /(const Vector2& v, float s) {
 Vector2 normalized_vector(const Vector2& v)
 {
 	float m = magnitude(v);
-	return Vector2(v.x / m, v.y / m);
+	if (m < 1.0f)
+		return Vector2(v.x / m, v.y / m);
+	else
+		return v;
 }
 
 float magnitude(const Vector2& v) {
@@ -53,8 +56,8 @@ float dot_product(const Vector2& a, const Vector2& b) {
 }
 
 Vector2 projection(const Vector2& a, const Vector2& b) {
-	float bMagSquared = magnitude(b) * magnitude(b);
-	return b * (dot_product(a, b) / bMagSquared);
+	float b_magnitude_squared = magnitude(b) * magnitude(b);
+	return b * (dot_product(a, b) / b_magnitude_squared);
 }
 
 Vector2 rejection(const Vector2& a, const Vector2& b) {
@@ -111,7 +114,10 @@ Vector3 operator /(const Vector3& v, float s) {
 Vector3 normalized_vector(const Vector3& v)
 {
 	float m = magnitude(v);
-	return Vector3(v.x / m, v.y / m, v.z / m);
+	if (m < 1.0f)
+		return Vector3(v.x / m, v.y / m, v.z / m);
+	else
+		return v;
 }
 
 float magnitude(const Vector3& v) {
@@ -129,8 +135,8 @@ Vector3 cross_product(const Vector3& a, const Vector3& b) {
 }
 
 Vector3 projection(const Vector3& a, const Vector3& b) {
-	float bMagSquared = magnitude(b) * magnitude(b);
-	return b * (dot_product(a, b) / bMagSquared);
+	float b_magnitude_squared = dot_product(b, b);
+	return b * (dot_product(a, b) / b_magnitude_squared);
 }
 
 Vector3 rejection(const Vector3& a, const Vector3& b) {
@@ -142,7 +148,7 @@ Vector3 reflection(const Vector3& a, const Vector3& b) {
 }
 
 float angle(const Vector3& a, const Vector3& b) {
-	float numerator = dot_product(a, b);
-	float denominator = magnitude(a) * magnitude(b);
-	return acos(numerator / denominator);
+	float dot_a_b = dot_product(a, b);
+	float magnitude_a_b = magnitude(a) * magnitude(b);
+	return acos(dot_a_b / magnitude_a_b);
 }

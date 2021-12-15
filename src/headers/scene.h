@@ -37,10 +37,10 @@ typedef struct Scene {
 	}
 
 	Color trace_ray(const Ray& ray, Hit& hit, float tmin, float tmax, int depth);
-	Color compute_lighting(const Hit& hit, const Ray& ray, int depth);
+	float compute_lighting(const Hit& hit, const Ray& ray);
 	float compute_diffuse_lighting(const Light& light, const Hit& hit);
 	float compute_specular_lighting(const Light& light, const Hit& hit, const Vector3& v, float s);
-	Color compute_reflection_color(const Light& light, const Hit& hit, int depth);
+	Color compute_reflection_color(const Light& light, const Hit& hit);
 
 } Scene;
 
