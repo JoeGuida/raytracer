@@ -12,9 +12,9 @@ int main() {
 	Ray camera(Point(0, 0, 0), Vector3(0, 0, 1));
 
 	// Create some materials
-	Material red_material = Material(Color(255, 0, 0), 500, 0.2f);
-	Material blue_material = Material(Color(0, 0, 255), 500, 0.3f);
-	Material green_material = Material(Color(0, 255, 0), 10, 0.4f);
+	Material red_material(Color(255, 0, 0), 10, 0.2f);
+	Material blue_material(Color(0, 0, 255), 10, 0.3f);
+	Material green_material(Color(0, 255, 0), 10, 0.4f);
 
 	// Create some spheres
 	scene.Add(Sphere(Point(0, -1, 3), 1, red_material));
@@ -34,7 +34,7 @@ int main() {
 		for (int x = -canvas.width / 2; x < canvas.width / 2; x++) {
 			Hit hit;
 			Vector3 direction = canvas_to_viewport(canvas, viewport, x, y, camera.direction.z);
-			Color color = scene.trace_ray(Ray(camera.origin, direction), hit, 1, INFINITY, 5);
+			Color color = scene.trace_ray(Ray(camera.origin, direction), hit, 1, INFINITY, 3);
 			put_pixel(x, y, color, image);
 		}
 	}
