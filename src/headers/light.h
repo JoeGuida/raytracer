@@ -30,7 +30,7 @@ typedef struct Light {
 		type = DIRECTIONAL;
 		intensity = i;
 		color = c;
-		direction = d;
+		direction = normalized_vector(d);
 	}
 
 	// Point Light
