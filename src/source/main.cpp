@@ -12,8 +12,8 @@ int main() {
 	Ray camera(Point(0, 0, 0), Vector3(0, 0, 1));
 
 	// Create some materials
-	Material red_material(Color(255, 0, 0), 10, 0.2f);
-	Material blue_material(Color(0, 0, 255), 10, 0.3f);
+	Material red_material(Color(255, 0, 0), 256, 0.2f);
+	Material blue_material(Color(0, 0, 255), 500, 0.3f);
 	Material green_material(Color(0, 255, 0), 10, 0.4f);
 
 	// Create some spheres
@@ -23,8 +23,8 @@ int main() {
 
 	// Create some lights
 	scene.Add(Light(0.2f, Color(255, 255, 255)));
-	scene.Add(Light(Point(2, 1, 0), 0.8f, Color(255, 255, 255)));
-	scene.Add(Light(0.2f, Color(255, 255, 255), Vector3(1, 0, 4)));
+	scene.Add(Light(0.2f, Color(255, 255, 255), Vector3(-10, 0, 100)));
+	scene.Add(Light(Point(0, 10, 20), 0.6f, Color(255, 255, 255)));
 
 	// Main Loop
 	std::ofstream image;
@@ -34,7 +34,7 @@ int main() {
 		for (int x = -canvas.width / 2; x < canvas.width / 2; x++) {
 			Hit hit;
 			Vector3 direction = canvas_to_viewport(canvas, viewport, x, y, camera.direction.z);
-			Color color = scene.trace_ray(Ray(camera.origin, direction), hit, 1, INFINITY, 3);
+			Color color = scene.trace_ray(Ray(camera.origin, direction), hit, scene.bias, INFINITY, 3);
 			put_pixel(x, y, color, image);
 		}
 	}
