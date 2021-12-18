@@ -20,4 +20,4 @@ The following shape types have been implemented
 - Sphere
 
 # Example Image  
-![raytracer image](https://github.com/JoeGuida/raytracer/blob/master/image.ppm?raw=true)
+![raytracer image](https://github.com/JoeGuida/raytracer/blob/master/image.jpg)
