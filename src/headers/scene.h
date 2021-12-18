@@ -17,7 +17,9 @@ typedef struct Scene {
 	Canvas canvas;
 	Viewport viewport;
 
-	const Color BACKGROUND_COLOR = Color(255, 255, 255);
+	float bias = 0.001f;
+
+	const Color BACKGROUND_COLOR = Color(128, 128, 128);
 
 	Scene() {
 
@@ -36,11 +38,11 @@ typedef struct Scene {
 		lights.push_back(light);
 	}
 
-	bool get_closest_intersection(const Ray& ray, Hit& hit, float tmin, float tmax);
+	float get_closest_intersection(const Ray& ray, Hit& hit, float tmin, float tmax);
 	Color trace_ray(const Ray& ray, Hit& hit, float tmin, float tmax, int depth);
-	float compute_lighting(const Hit& hit, const Ray& ray);
+	float compute_lighting(Hit& hit, const Ray& ray);
 	float compute_diffuse_lighting(const Light& light, const Hit& hit);
-	float compute_specular_lighting(const Light& light, const Hit& hit, const Vector3& v, float s);
+	float compute_specular_lighting(const Light& light, const Hit& hit, const Vector3& v);
 
 } Scene;
 

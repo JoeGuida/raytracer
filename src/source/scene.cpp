@@ -1,7 +1,7 @@
 #include "../headers/scene.h"
 #include <iostream>
 
-bool Scene::get_closest_intersection(const Ray& ray, Hit& hit, float tmin, float tmax) {
+float Scene::get_closest_intersection(const Ray& ray, Hit& hit, float tmin, float tmax) {
 	float closest_t = INFINITY;
 	Sphere* closest_sphere = NULL;
 
@@ -21,39 +21,29 @@ bool Scene::get_closest_intersection(const Ray& ray, Hit& hit, float tmin, float
 	}
 
 	if (closest_sphere == NULL)
-		return false;
+		return -1;
 
 	hit.point = ray.origin + ray.direction * closest_t;
 	hit.normal = normalized_vector(hit.point - closest_sphere->center);
 	hit.material = closest_sphere->material;
 
-	return true;
+	return closest_t;
 }
 
-// Determines if the ray hits any object in the scene
-// gets the point of the closest object hit
-// computes the lighting at the point and returns the color
-// depth determines how many times the light can bounce to calculate reflections/shadows
 Color Scene::trace_ray(const Ray& ray, Hit& hit, float tmin, float tmax, int depth) {
 	Color color;
 
-	if (!get_closest_intersection(ray, hit, tmin, tmax))
+	float t = get_closest_intersection(ray, hit, tmin, tmax);
+	if (t == -1)
 		return BACKGROUND_COLOR;
 
 	// Compute the lighting and return the color as int
-	float lighting_value = compute_lighting(hit, ray);
-	color = hit.material.color * lighting_value;
-
-	if (depth <= 0 || hit.material.reflectivity <= 0)
-		return Color(int(color.r), int(color.g), int(color.b));
-	else
-		return Color(int(color.r), int(color.g), int(color.b));
+	color = hit.material.color * compute_lighting(hit, ray);
+	return Color(int(color.r), int(color.g), int(color.b));
 }
 
-float Scene::compute_lighting(const Hit& hit, const Ray& ray) {
+float Scene::compute_lighting(Hit& hit, const Ray& ray) {
 	float i = 0;
-	float diffuse = 0;
-	float specular = 0;
 	float tmax = 0;
 	Vector3 l;
 
@@ -63,21 +53,20 @@ float Scene::compute_lighting(const Hit& hit, const Ray& ray) {
 			i += light.intensity;
 		}
 		else if (light.type == DIRECTIONAL) {
-			l = normalized_vector(-light.direction);
+			l = normalized_vector(light.direction);
 			tmax = INFINITY;
 		}
 		else if (light.type == POINT) {
-			l = normalized_vector(hit.point - light.position);
+			l = normalized_vector(light.position - hit.point);
 			tmax = 1;
 		}
 
-		// Shadow check
+		// Compute lighting if point is not in shadow
 		Hit h;
-		Ray shadow_ray(hit.point, l);
-		bool in_shadow = get_closest_intersection(shadow_ray, h, 0.001f, tmax);
-		if (!in_shadow) {
+		float t = get_closest_intersection(Ray(hit.point, -l), h, bias, tmax);
+		if (t == -1) {
 			i += compute_diffuse_lighting(light, hit);
-			i += compute_specular_lighting(light, hit, -ray.direction, hit.material.specularity);
+			i += compute_specular_lighting(light, hit, ray.direction);
 		}
 	}
 
@@ -95,14 +84,13 @@ float Scene::compute_diffuse_lighting(const Light& light, const Hit& hit) {
 		l = normalized_vector(light.position - hit.point);
 
 	// Diffuse is determined by the angle between the hit normal and the light direction
-	float dot_n_l = dot_product(hit.normal, -l);
-	if (dot_n_l > 0)
-		diffuse = light.intensity * angle(hit.normal, -l);
+	if(dot_product(hit.normal, l) > 0)
+		diffuse = light.intensity * std::max(0.0f, cos(angle(hit.normal, l)));
 
 	return diffuse;
 }
 
-float Scene::compute_specular_lighting(const Light& light, const Hit& hit, const Vector3& v, float s) {
+float Scene::compute_specular_lighting(const Light& light, const Hit& hit, const Vector3& v) {
 	float specular = 0;
 	Vector3 l;
 	
@@ -111,10 +99,10 @@ float Scene::compute_specular_lighting(const Light& light, const Hit& hit, const
 	else if (light.type == POINT)
 		l = normalized_vector(light.position - hit.point);
 
-	Vector3 r = reflection(l, hit.normal);
-	float dot_r_v = dot_product(r, v);
-	if(dot_r_v > 0)
-		specular = powf(cos(angle(r, v)), s);
-	
-	return specular;
+	Vector3 r = -l + hit.normal * 2 * dot_product(l, hit.normal);
+	Vector3 highlight = (v + l) / (magnitude(v + l));
+	if(dot_product(r, -v) > 0)
+		specular = pow(std::max(0.0f, cos(angle(hit.normal, highlight))), hit.material.specularity);
+
+	return std::max(0.0f, specular);
 }
