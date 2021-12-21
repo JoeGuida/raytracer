@@ -1,6 +1,6 @@
 # Raytracer
 
-This project is a simple C++ raytracer and is an amalgamation of all of the research I have dont on this topic.
+This project is a simple C++ raytracer and is an amalgamation of all of the research I have done on this topic.
 
 # Light Types
 The following light types have been implemented
