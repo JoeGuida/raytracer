@@ -7,6 +7,7 @@
 #include "hit.h"
 #include "light.h"
 #include "point.h"
+#include "camera.h"
 #include <vector>
 
 typedef struct Scene {
@@ -16,6 +17,7 @@ typedef struct Scene {
 
 	Canvas canvas;
 	Viewport viewport;
+	Camera camera;
 
 	float bias = 0.001f;
 
@@ -25,9 +27,10 @@ typedef struct Scene {
 
 	}
 
-	Scene(Canvas c, Viewport v) {
+	Scene(Canvas c, Viewport v, Camera cam) {
 		canvas = c;
 		viewport = v;
+		camera = cam;
 	}
 
 	void Add(const Sphere& sphere) {
