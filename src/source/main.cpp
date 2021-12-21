@@ -12,9 +12,9 @@ int main() {
 	Ray camera(Point(0, 0, 0), Vector3(0, 0, 1));
 
 	// Create some materials
-	Material red_material(Color(255, 0, 0), 256, 0.2f);
-	Material blue_material(Color(0, 0, 255), 500, 0.3f);
-	Material green_material(Color(0, 255, 0), 10, 0.4f);
+	Material red_material(Color(255, 0, 0), 256, 1.0f);
+	Material blue_material(Color(0, 0, 255), 500, 0.8f);
+	Material green_material(Color(0, 255, 0), 10, 0.8f);
 
 	// Create some spheres
 	scene.Add(Sphere(Point(0, -1, 3), 1, red_material));
@@ -24,7 +24,7 @@ int main() {
 	// Create some lights
 	scene.Add(Light(0.2f, Color(255, 255, 255)));
 	scene.Add(Light(0.2f, Color(255, 255, 255), Vector3(-10, 0, 100)));
-	scene.Add(Light(Point(0, 10, 20), 0.6f, Color(255, 255, 255)));
+	scene.Add(Light(Point(0, 5, 20), 0.6f, Color(255, 255, 255)));
 
 	// Main Loop
 	std::ofstream image;

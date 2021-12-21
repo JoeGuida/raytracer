@@ -29,5 +29,9 @@ Color operator *(const Color& a, const Color& b);
 Color operator *(const Color& c, float s);
 Color operator /(const Color& a, const Color& b);
 Color operator /(const Color& c, float s);
+bool operator ==(const Color& l, const Color& r);
+bool operator !=(const Color& l, const Color& r);
+
+Color float_to_rgb_color(const Color& color);
 
 #endif

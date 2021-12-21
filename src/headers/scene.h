@@ -40,7 +40,7 @@ typedef struct Scene {
 
 	float get_closest_intersection(const Ray& ray, Hit& hit, float tmin, float tmax);
 	Color trace_ray(const Ray& ray, Hit& hit, float tmin, float tmax, int depth);
-	float compute_lighting(Hit& hit, const Ray& ray);
+	Color compute_lighting(Hit& hit, const Ray& ray, int depth);
 	float compute_diffuse_lighting(const Light& light, const Hit& hit);
 	float compute_specular_lighting(const Light& light, const Hit& hit, const Vector3& v);
 

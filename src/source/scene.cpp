@@ -26,52 +26,58 @@ float Scene::get_closest_intersection(const Ray& ray, Hit& hit, float tmin, floa
 	hit.point = ray.origin + ray.direction * closest_t;
 	hit.normal = normalized_vector(hit.point - closest_sphere->center);
 	hit.material = closest_sphere->material;
+	hit.object = closest_sphere;
 
 	return closest_t;
 }
 
 Color Scene::trace_ray(const Ray& ray, Hit& hit, float tmin, float tmax, int depth) {
-	Color color;
+	get_closest_intersection(ray, hit, tmin, tmax);
 
-	float t = get_closest_intersection(ray, hit, tmin, tmax);
-	if (t == -1)
+	if (hit.object == nullptr)
 		return BACKGROUND_COLOR;
 
-	// Compute the lighting and return the color as int
-	color = hit.material.color * compute_lighting(hit, ray);
-	return Color(int(color.r), int(color.g), int(color.b));
+	Color color = float_to_rgb_color(compute_lighting(hit, ray, depth));
+
+	float reflectivity = hit.object->material.reflectivity;
+	if (depth <= 0 || reflectivity <= 0)
+		return color;
+
+	Ray reflection_ray(ray.direction, hit.normal);
+	Color reflected_color = trace_ray(reflection_ray, hit, tmin, tmax, --depth);
+
+	return float_to_rgb_color(color * (1 - reflectivity) + reflected_color * reflectivity);
 }
 
-float Scene::compute_lighting(Hit& hit, const Ray& ray) {
+Color Scene::compute_lighting(Hit& hit, const Ray& ray, int depth) {
 	float i = 0;
 	float tmax = 0;
-	Vector3 l;
+	Vector3 light_direction;
+	Color color = hit.material.color;
 
 	// Compute diffuse & specular lighting for point
 	for (const Light& light : lights) {
-		if (light.type == AMBIENT) {
+		if (light.type == AMBIENT)
 			i += light.intensity;
-		}
 		else if (light.type == DIRECTIONAL) {
-			l = normalized_vector(light.direction);
+			light_direction = normalized_vector(light.direction);
 			tmax = INFINITY;
 		}
 		else if (light.type == POINT) {
-			l = normalized_vector(light.position - hit.point);
+			light_direction = normalized_vector(light.position - hit.point);
 			tmax = 1;
 		}
 
 		// Compute lighting if point is not in shadow
-		Hit h;
-		float t = get_closest_intersection(Ray(hit.point, -l), h, bias, tmax);
-		if (t == -1) {
+		Ray shadow_ray(hit.point, -light_direction);
+		Hit shadow_hit;
+		if (get_closest_intersection(shadow_ray, shadow_hit, bias, tmax) == -1) {
 			i += compute_diffuse_lighting(light, hit);
 			i += compute_specular_lighting(light, hit, ray.direction);
 		}
 	}
 
-	i = std::min(i, 1.0f);
-	return  i;
+	return  color * std::min(i, 1.0f);
 }
 
 float Scene::compute_diffuse_lighting(const Light& light, const Hit& hit) {
@@ -106,3 +112,4 @@ float Scene::compute_specular_lighting(const Light& light, const Hit& hit, const
 
 	return std::max(0.0f, specular);
 }
+

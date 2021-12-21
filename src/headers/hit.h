@@ -10,11 +10,13 @@ typedef struct Hit {
 	Point point;
 	Vector3 normal;
 	Material material;
+	Sphere* object;
 
 	Hit() {
 		point = Point();
 		normal = Vector3();
 		material = Material();
+		object = nullptr;
 	}
 
 } Hit;
