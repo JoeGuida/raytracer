@@ -13,6 +13,7 @@ The following light types have been implemented
 The following lighting features have been implemented
 - Diffuse Lighting
 - Specular Reflections
+- Reflections
 - Shadows
 
 # Shapes
