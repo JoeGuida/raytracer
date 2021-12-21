@@ -16,7 +16,7 @@ The following lighting features have been implemented
 - Reflections
 - Shadows
 
-# Shapes
+# 3D Primitives
 The following shape types have been implemented
 - Sphere
 
