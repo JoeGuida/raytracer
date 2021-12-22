@@ -23,7 +23,7 @@ typedef struct Matrix2D {
 		n[1][0] = b.x; n[1][1] = b.y;
 	}
 
-	float& operator ()(int i, int j) {
+	float operator ()(int i, int j) const {
 		return n[j][i];
 	}
 
@@ -57,7 +57,7 @@ typedef struct Matrix3D {
 		n[2][0] = c.x; n[2][1] = c.y; n[2][2] = c.z;
 	}
 
-	float& operator ()(int i, int j) {
+	float operator ()(int i, int j) const {
 		return n[i][j];
 	}
 
@@ -67,6 +67,6 @@ typedef struct Matrix3D {
 
 } Matrix3D;
 
-Vector3 operator *(const Matrix3D& m, const Vector3& v);
+Vector3 operator *(const Vector3& v, const Matrix3D& m);
 
 #endif

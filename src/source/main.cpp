@@ -31,7 +31,7 @@ int main() {
 	for (int y = canvas.height / 2; y > -canvas.height / 2; y--) {
 		for (int x = -canvas.width / 2; x < canvas.width / 2; x++) {
 			Hit hit;
-			Vector3 direction = camera.rotation * canvas_to_viewport(canvas, viewport, x, y, 1);
+			Vector3 direction = canvas_to_viewport(canvas, viewport, x, y, 1) * camera.rotation;
 			Color color = scene.trace_ray(Ray(camera.position, direction), hit, scene.bias, INFINITY, 3);
 			put_pixel(x, y, color, image);
 		}
