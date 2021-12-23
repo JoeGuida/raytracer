@@ -26,26 +26,25 @@ float Scene::get_closest_intersection(const Ray& ray, Hit& hit, float tmin, floa
 	hit.point = ray.origin + ray.direction * closest_t;
 	hit.normal = normalized_vector(hit.point - closest_sphere->center);
 	hit.material = closest_sphere->material;
-	hit.object = closest_sphere;
 
 	return closest_t;
 }
 
 Color Scene::trace_ray(const Ray& ray, Hit& hit, float tmin, float tmax, int depth) {
-	get_closest_intersection(ray, hit, tmin, tmax);
+	float t = get_closest_intersection(ray, hit, tmin, tmax);
 
-	if (hit.object == nullptr)
+	if (hit.is_null()) {
 		return BACKGROUND_COLOR;
+	}
 
 	Color color = float_to_rgb_color(compute_lighting(hit, ray, depth));
 
-	float reflectivity = hit.object->material.reflectivity;
+	float reflectivity = hit.material.reflectivity;
 	if (depth <= 0 || reflectivity <= 0)
 		return color;
 
 	Ray reflection_ray(ray.direction, hit.normal);
 	Color reflected_color = trace_ray(reflection_ray, hit, tmin, tmax, --depth);
-
 	return float_to_rgb_color(color * (1 - reflectivity) + reflected_color * reflectivity);
 }
 

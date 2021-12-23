@@ -38,6 +38,14 @@ Vector2 operator /(const Vector2& v, float s) {
 	return Vector2(v.x * s, v.y * s);
 }
 
+bool operator ==(const Vector2& l, const Vector2& r) {
+	return l.x == r.x && l.y == r.y;
+}
+
+bool operator !=(const Vector2& l, const Vector2& r) {
+	return !(l == r);
+}
+
 Vector2 normalized_vector(const Vector2& v)
 {
 	float m = magnitude(v);
@@ -109,6 +117,14 @@ Vector3 operator /(const Vector3& a, const Vector3& b) {
 Vector3 operator /(const Vector3& v, float s) {
 	s = 1.f / s;
 	return Vector3(v.x * s, v.y * s, v.z * s);
+}
+
+bool operator ==(const Vector3& l, const Vector3& r) {
+	return l.x == r.x && l.y == r.y && l.z == r.z;
+}
+
+bool operator !=(const Vector3& l, const Vector3& r) {
+	return !(l == r);
 }
 
 Vector3 normalized_vector(const Vector3& v)

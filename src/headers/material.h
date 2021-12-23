@@ -23,4 +23,7 @@ typedef struct Material {
 
 } Material;
 
+bool operator ==(const Material& l, const Material& r);
+bool operator !=(const Material& l, const Material& r);
+
 #endif

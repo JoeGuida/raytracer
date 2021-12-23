@@ -38,7 +38,7 @@ bool operator ==(const Color& l, const Color& r) {
 }
 
 bool operator !=(const Color& l, const Color& r) {
-	return l.r != r.r && l.g != r.g && l.b != r.b;
+	return !(l == r);
 }
 
 Color float_to_rgb_color(const Color& color) {

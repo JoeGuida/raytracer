@@ -102,6 +102,7 @@
     <ClCompile Include="src\source\canvas.cpp" />
     <ClCompile Include="src\source\color.cpp" />
     <ClCompile Include="src\source\main.cpp" />
+    <ClCompile Include="src\source\material.cpp" />
     <ClCompile Include="src\source\matrix.cpp" />
     <ClCompile Include="src\source\scene.cpp" />
     <ClCompile Include="src\source\sphere.cpp" />
