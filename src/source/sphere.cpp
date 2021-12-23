@@ -19,3 +19,7 @@ float Sphere::intersects(const Ray& ray, float* t1, float* t2) const {
 	*t1 = (-b + discriminant / 2 * a);
 	*t2 = (-b - discriminant / 2 * a);
 }
+
+Vector3 Sphere::get_normal(const Point& point) {
+	return normalized_vector(point - center);
+}

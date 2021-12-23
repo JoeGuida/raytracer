@@ -104,6 +104,7 @@
     <ClCompile Include="src\source\main.cpp" />
     <ClCompile Include="src\source\material.cpp" />
     <ClCompile Include="src\source\matrix.cpp" />
+    <ClCompile Include="src\source\plane.cpp" />
     <ClCompile Include="src\source\scene.cpp" />
     <ClCompile Include="src\source\sphere.cpp" />
     <ClCompile Include="src\source\vector.cpp" />
@@ -116,6 +117,7 @@
     <ClInclude Include="src\headers\light.h" />
     <ClInclude Include="src\headers\material.h" />
     <ClInclude Include="src\headers\matrix.h" />
+    <ClInclude Include="src\headers\plane.h" />
     <ClInclude Include="src\headers\point.h" />
     <ClInclude Include="src\headers\ray.h" />
     <ClInclude Include="src\headers\scene.h" />

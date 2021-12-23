@@ -2,6 +2,7 @@
 #define _SCENE_H_
 
 #include "sphere.h"
+#include "plane.h"
 #include "canvas.h"
 #include "viewport.h"
 #include "hit.h"
@@ -13,6 +14,7 @@
 typedef struct Scene {
 
 	std::vector<Sphere> spheres;
+	std::vector<Plane> planes;
 	std::vector<Light> lights;
 
 	Canvas canvas;
@@ -35,6 +37,10 @@ typedef struct Scene {
 
 	void Add(const Sphere& sphere) {
 		spheres.push_back(sphere);
+	}
+
+	void Add(const Plane& plane) {
+		planes.push_back(plane);
 	}
 
 	void Add(const Light& light) {

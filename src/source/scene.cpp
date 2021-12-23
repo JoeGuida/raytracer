@@ -3,29 +3,51 @@
 
 float Scene::get_closest_intersection(const Ray& ray, Hit& hit, float tmin, float tmax) {
 	float closest_t = INFINITY;
-	Sphere* closest_sphere = NULL;
+	float sphere_t = INFINITY;
+	float plane_t = INFINITY;
+	Sphere* closest_sphere = nullptr;
+	Plane* closest_plane = nullptr;
 
-	// Find the closest sphere that intersects the ray and the t value
+	// Determine if the ray intersects a sphere and get the closest t value if it does
 	for (Sphere& sphere : spheres) {
 		float t1, t2 = 0;
 		sphere.intersects(ray, &t1, &t2);
 
 		if (t1 > tmin && t1 < tmax && t1 < closest_t) {
 			closest_t = t1;
+			sphere_t = t1;
 			closest_sphere = &sphere;
 		}
 		if (t2 > tmin && t2 < tmax && t2 < closest_t) {
 			closest_t = t2;
+			sphere_t = t2;
 			closest_sphere = &sphere;
 		}
 	}
 
-	if (closest_sphere == NULL)
+	// Determine if the ray intersects a plane and get the t value if it does
+	for (Plane& plane : planes) {
+		float t = plane.raycast(ray);
+		if (t > tmin && t < tmax && t < closest_t) {
+			closest_t = t;
+			plane_t = t;
+			closest_plane = &plane;
+		}
+	}
+
+	if (closest_sphere == nullptr && closest_plane == nullptr)
 		return -1;
 
+	// Determine which object is closest and set the hit properties
 	hit.point = ray.origin + ray.direction * closest_t;
-	hit.normal = normalized_vector(hit.point - closest_sphere->center);
-	hit.material = closest_sphere->material;
+	if (closest_plane != nullptr) {
+		hit.normal = closest_plane->get_normal(hit.point);
+		hit.material = closest_plane->material;
+	}
+	if (closest_sphere != nullptr) {
+		hit.normal = closest_sphere->get_normal(hit.point);
+		hit.material = closest_sphere->material;
+	}
 
 	return closest_t;
 }
