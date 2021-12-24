@@ -86,12 +86,13 @@ Color Scene::compute_lighting(Hit& hit, const Ray& ray, int depth) {
 		}
 		else if (light.type == POINT) {
 			light_direction = normalized_vector(light.position - hit.point);
-			tmax = 1;
+			tmax = magnitude(light.position - hit.point);
 		}
 
 		// Compute lighting if point is not in shadow
 		Ray shadow_ray(hit.point, -light_direction);
 		Hit shadow_hit;
+		float t = get_closest_intersection(shadow_ray, shadow_hit, bias, tmax);
 		if (get_closest_intersection(shadow_ray, shadow_hit, bias, tmax) == -1) {
 			i += compute_diffuse_lighting(light, hit);
 			i += compute_specular_lighting(light, hit, ray.direction);
@@ -126,11 +127,10 @@ float Scene::compute_specular_lighting(const Light& light, const Hit& hit, const
 	else if (light.type == POINT)
 		l = normalized_vector(light.position - hit.point);
 
-	Vector3 r = -l + hit.normal * 2 * dot_product(l, hit.normal);
-	Vector3 highlight = (v + l) / (magnitude(v + l));
-	if(dot_product(r, -v) > 0)
-		specular = pow(std::max(0.0f, cos(angle(hit.normal, highlight))), hit.material.specularity);
-
+	Vector3 r = hit.normal * 2 * dot_product(l, hit.normal) - l;
+	if(dot_product(r, v) > 0)
+		specular = light.intensity * pow(std::max(0.0f, cos(angle(r, v))), hit.material.specularity);
+	//std::cout << specular << std::endl;
 	return std::max(0.0f, specular);
 }
 

@@ -21,7 +21,7 @@ typedef struct Scene {
 	Viewport viewport;
 	Camera camera;
 
-	float bias = 0.001f;
+	float bias = 0.0001f;
 
 	const Color BACKGROUND_COLOR = Color(128, 128, 128);
 

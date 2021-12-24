@@ -10,23 +10,23 @@ int main() {
 	Scene scene(canvas, viewport, camera);
 
 	// Create some materials
-	Material red_material(Color(255, 0, 0), 256, 0.2f);
-	Material blue_material(Color(0, 0, 255), 500, 0.3f);
-	Material green_material(Color(0, 255, 0), 10, 0.4f);
-	Material white_material(Color(255, 255, 255), 100, 0.5f);
+	Material red_material(Color(255, 0, 0), 10000, 0.7f);
+	Material blue_material(Color(0, 0, 255), 1000, 0.5f);
+	Material green_material(Color(0, 255, 0), 500, 0.2f);
+	Material white_material(Color(255, 255, 255), 1, 0.3f);
 
 	// Create some spheres
-	scene.Add(Sphere(Point(0, -1, 3), 1, red_material));
-	scene.Add(Sphere(Point(2, 0, 4), 1, blue_material));
-	scene.Add(Sphere(Point(-2, 0, 4), 1, green_material));
+	scene.Add(Sphere(Point(0, 0, 5), 1, red_material));
+	scene.Add(Sphere(Point(2, 2, 5), 1, blue_material));
+	scene.Add(Sphere(Point(-2, -2, 5), 1, green_material));
 
 	// Create a plane
-	scene.Add(Plane(Vector3(0, 1, 0), -12.0f, white_material));
+	//scene.Add(Plane(Vector3(0, 1, 0), -12.0f, white_material));
 
 	// Create some lights
-	scene.Add(Light(0.2f, Color(255, 255, 255)));
-	scene.Add(Light(0.2f, Color(255, 255, 255), Vector3(-10, 0, 100)));
-	scene.Add(Light(Point(0, 5, 20), 0.6f, Color(255, 255, 255)));
+	scene.Add(Light(0.2f, Color(255, 255, 255))); // ambient
+	scene.Add(Light(0.8f, Color(255, 255, 255), Vector3(-1000, 1000, 1000))); // directional
+	scene.Add(Light(Point(0, 0, 12), 0.3f, Color(255, 255, 255))); // point
 
 	// Main Loop
 	std::ofstream image;
@@ -36,7 +36,7 @@ int main() {
 		for (int x = -canvas.width / 2; x < canvas.width / 2; x++) {
 			Hit hit;
 			Vector3 direction = canvas_to_viewport(canvas, viewport, x, y, 1) * camera.rotation;
-			Color color = scene.trace_ray(Ray(camera.position, direction), hit, scene.bias, INFINITY, 100);
+			Color color = scene.trace_ray(Ray(camera.position, direction), hit, scene.bias, INFINITY, 3);
 			put_pixel(x, y, color, image);
 		}
 	}
