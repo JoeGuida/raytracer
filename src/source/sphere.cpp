@@ -1,7 +1,9 @@
 #include "../headers/sphere.h"
 #include <cmath>
 
-float Sphere::intersects(const Ray& ray, float* t1, float* t2) const {
+float Sphere::raycast(const Ray& ray, float* t1, float* t2) const {
+	*t1 = 0, *t2 = 0;
+
 	float r = radius;
 	Vector3 o = ray.origin;
 	Vector3 d = ray.direction;
@@ -20,6 +22,6 @@ float Sphere::intersects(const Ray& ray, float* t1, float* t2) const {
 	*t2 = (-b - discriminant / 2 * a);
 }
 
-Vector3 Sphere::get_normal(const Point& point) {
+Vector3 Sphere::get_normal(const Point& point) const {
 	return normalized_vector(point - center);
 }

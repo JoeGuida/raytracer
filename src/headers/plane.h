@@ -23,8 +23,8 @@ typedef struct Plane {
 		material = m;
 	}
 
-	float raycast(const Ray& ray);
-	Vector3 get_normal(const Point& point);
+	float raycast(const Ray& ray) const;
+	Vector3 get_normal(const Point& point) const;
 
 } Plane;
 

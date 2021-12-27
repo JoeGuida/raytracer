@@ -1,6 +1,6 @@
 #include "../headers/plane.h"
 
-float Plane::raycast(const Ray& ray) {
+float Plane::raycast(const Ray& ray) const {
 	float direction_dot_normal = dot_product(ray.direction, normal);
 	float origin_dot_normal = dot_product(ray.origin, normal);
 
@@ -15,7 +15,7 @@ float Plane::raycast(const Ray& ray) {
 	return -1;
 }
 
-Vector3 Plane::get_normal(const Point& point) {
+Vector3 Plane::get_normal(const Point& point) const {
 	return normal;
 }
 

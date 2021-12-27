@@ -23,8 +23,8 @@ public:
 		material = m;
 	}
 
-	float intersects(const Ray& ray, float* t1, float* t2) const;
-	Vector3 get_normal(const Point& point);
+	float raycast(const Ray& ray, float* t1, float* t2) const;
+	Vector3 get_normal(const Point& point) const;
 };
 
 #endif
