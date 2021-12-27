@@ -5,7 +5,7 @@
 #include "plane.h"
 #include "canvas.h"
 #include "viewport.h"
-#include "hit.h"
+#include "raycasthit.h"
 #include "light.h"
 #include "point.h"
 #include "camera.h"
@@ -21,13 +21,12 @@ typedef struct Scene {
 	Viewport viewport;
 	Camera camera;
 
-	float bias = 0.0001f;
+	float shadow_bias = 0.0001f;
+	RaycastHit hit;
 
 	const Color BACKGROUND_COLOR = Color(128, 128, 128);
 
-	Scene() {
-
-	}
+	Scene() {}
 
 	Scene(Canvas c, Viewport v, Camera cam) {
 		canvas = c;
@@ -47,11 +46,12 @@ typedef struct Scene {
 		lights.push_back(light);
 	}
 
-	float get_closest_intersection(const Ray& ray, Hit& hit, float tmin, float tmax);
-	Color trace_ray(const Ray& ray, Hit& hit, float tmin, float tmax, int depth);
-	Color compute_lighting(Hit& hit, const Ray& ray, int depth);
-	float compute_diffuse_lighting(const Light& light, const Hit& hit);
-	float compute_specular_lighting(const Light& light, const Hit& hit, const Vector3& v);
+	Color trace_ray(const Ray& ray, RaycastHit& hit, float tmin, float tmax, int recursion_depth);
+	bool intersects_object(const Ray& ray, float tmin, float tmax);
+	float get_closest_intersection(const Ray& ray, RaycastHit& hit, float tmin, float tmax) const;
+	float compute_lighting(RaycastHit& hit, const Ray& ray);
+	float compute_diffuse_lighting(const Vector3& light_direction, const RaycastHit& hit) const;
+	float compute_specular_lighting(const Vector3& light_direction, const RaycastHit& hit, const Vector3& view_direction) const;
 
 } Scene;
 
