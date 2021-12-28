@@ -155,7 +155,7 @@ void Scene::ray_trace_ppm_image(std::string filename) {
 			if (options.sampling == 2) {
 				std::vector<Vector3> pixels(1, direction);
 				color = supersample_pixels(pixels, subdivisions, quarter_pixel_width);
-				color = float_to_rgb_color(color / (options.sampling_amount + 1));
+				color = float_to_rgb_color(color / (pow(4, subdivisions)));
 			}
 
 			put_pixel(x, y, color, image);
@@ -171,19 +171,21 @@ void Scene::ray_trace_with_subsampling(std::string filename, int count) {
 Color Scene::supersample_pixels(const std::vector<Vector3>& pixels, int subdivisions, float offset) {
 	Color color;
 
-	if (subdivisions < 0) 
+	if (subdivisions <= 0) {
+		for (const Vector3& direction : pixels) {
+			RaycastHit hit;
+			color += trace_ray(Ray(camera.position, direction), hit, 0, INFINITY, 3);
+		}
 		return color;
+	}
 
 	std::vector<Vector3> next_subdivision_pixels;
-
 	for (const Vector3& direction : pixels) {
-		RaycastHit hit;
-		color += trace_ray(Ray(camera.position, direction), hit, 0, INFINITY, 3);
-
 		next_subdivision_pixels.push_back(Vector3(direction.x - offset, direction.y - offset, direction.z));
 		next_subdivision_pixels.push_back(Vector3(direction.x + offset, direction.y - offset, direction.z));
 		next_subdivision_pixels.push_back(Vector3(direction.x - offset, direction.y + offset, direction.z));
 		next_subdivision_pixels.push_back(Vector3(direction.x + offset, direction.y + offset, direction.z));
 	}
-	return color + supersample_pixels(next_subdivision_pixels, --subdivisions, offset / 2);
+
+	return supersample_pixels(next_subdivision_pixels, --subdivisions, offset / 2);
 }

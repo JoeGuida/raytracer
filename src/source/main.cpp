@@ -1,17 +1,13 @@
 #include "../headers/scene.h"
 #include <iostream>
 #include <fstream>
-#include <cstdlib>
-#include <ctime>
 
 int main() {
-	srand(time(NULL));
-
 	// Create the scene
 	const Canvas canvas(512, 512);
 	const Viewport viewport(1.5f, 1.5f);
 	const Camera camera(Vector3(0, 0, 0), Matrix3D(1, 0, 0, 0, 1, 0, 0, 0, 1));
-	const Options options(2, 12, Color(128, 128, 128));
+	const Options options(2, 8, Color(128, 128, 128));
 	Scene scene(canvas, viewport, camera, options);
 
 	//Create some materials

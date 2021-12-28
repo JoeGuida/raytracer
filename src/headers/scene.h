@@ -10,7 +10,6 @@
 #include "light.h"
 #include "point.h"
 #include "camera.h"
-#include <cstdlib>
 #include <vector>
 
 typedef struct Scene {
