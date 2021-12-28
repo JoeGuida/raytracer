@@ -113,6 +113,7 @@
     <ClInclude Include="src\headers\camera.h" />
     <ClInclude Include="src\headers\canvas.h" />
     <ClInclude Include="src\headers\color.h" />
+    <ClInclude Include="src\headers\options.h" />
     <ClInclude Include="src\headers\raycasthit.h" />
     <ClInclude Include="src\headers\light.h" />
     <ClInclude Include="src\headers\material.h" />
