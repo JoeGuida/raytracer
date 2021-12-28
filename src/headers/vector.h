@@ -57,6 +57,7 @@ Vector2 projection(const Vector2& a, const Vector2& b);
 Vector2 rejection(const Vector2& a, const Vector2& b);
 Vector2 reflection(const Vector2& a, const Vector2& b);
 float angle(const Vector2& a, const Vector2& b);
+float distance(const Vector2& a, const Vector2& b);
 
 Vector3 operator +(const Vector3& a, const Vector3& b);
 Vector3 operator +(const Vector3& v, float s);
@@ -78,5 +79,6 @@ Vector3 projection(const Vector3& a, const Vector3& b);
 Vector3 rejection(const Vector3& a, const Vector3& b);
 Vector3 reflection(const Vector3& a, const Vector3& b);
 float angle(const Vector3& a, const Vector3& b);
+float distance(const Vector3& a, const Vector3& b);
 
 #endif

@@ -1,5 +1,17 @@
 #include "../headers/color.h"
 
+void Color::operator +=(const Color& c) {
+	r += c.r;
+	g += c.g;
+	b += c.b;
+}
+
+void Color::operator /=(float s) {
+	r /= s;
+	g /= s;
+	b /= s;
+}
+
 Color operator +(const Color& a, const Color& b) {
 	return Color(a.r + b.r, a.g + b.g, a.b + b.b);
 }

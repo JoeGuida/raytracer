@@ -23,7 +23,7 @@ typedef struct Canvas {
 
 } Canvas;
 
-Vector3 canvas_to_viewport(const Canvas& c, const Viewport& v, int x, int y, int d);
+Vector3 canvas_to_viewport(const Canvas& c, const Viewport& v, float x, float y, float d);
 void put_pixel(int x, int y, const Color& c, std::ofstream& filestream);
 
 #endif

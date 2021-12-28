@@ -82,6 +82,10 @@ float angle(const Vector2& a, const Vector2& b) {
 	return acos(numerator / denominator);
 }
 
+float distance(const Vector2& a, const Vector2& b) {
+	return magnitude(a - b);
+}
+
 Vector3 operator +(const Vector3& a, const Vector3& b) {
 	return Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
 }
@@ -167,4 +171,8 @@ float angle(const Vector3& a, const Vector3& b) {
 	float dot_a_b = dot_product(a, b);
 	float magnitude_a_b = magnitude(a) * magnitude(b);
 	return acos(dot_a_b / magnitude_a_b);
+}
+
+float distance(const Vector3& a, const Vector3& b) {
+	return magnitude(a - b);
 }

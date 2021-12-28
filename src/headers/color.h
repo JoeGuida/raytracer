@@ -19,6 +19,9 @@ typedef struct Color {
 		b = z;
 	}
 
+	void operator +=(const Color& c);
+	void operator /=(float s);
+
 } Color;
 
 Color operator +(const Color& a, const Color& b);

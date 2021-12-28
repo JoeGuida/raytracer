@@ -1,12 +1,16 @@
 #include "../headers/scene.h"
 #include <iostream>
 
+long Scene::rays_casted = 0;
+
 Color Scene::trace_ray(const Ray& ray, RaycastHit& hit, float tmin, float tmax, int recursion_depth) {
+	rays_casted++;
+
 	const float t = get_closest_intersection(ray, hit, tmin, tmax);
 	const float reflectivity = hit.material.reflectivity;
 
 	if (hit.is_null())
-		return BACKGROUND_COLOR;
+		return options.background_color;
 
 	Color color = float_to_rgb_color(hit.material.color * compute_lighting(hit, ray));
 
@@ -15,7 +19,7 @@ Color Scene::trace_ray(const Ray& ray, RaycastHit& hit, float tmin, float tmax, 
 
 	const Ray reflection_ray(ray.direction, hit.normal);
 	const Color reflected_color = trace_ray(reflection_ray, hit, tmin, tmax, --recursion_depth);
-	return float_to_rgb_color(color * (1 - reflectivity) + reflected_color * reflectivity);
+	return color * (1 - reflectivity) + reflected_color * reflectivity;
 }
 
 bool Scene::intersects_object(const Ray& ray, float tmin, float tmax) {
@@ -125,4 +129,61 @@ float Scene::compute_specular_lighting(const Vector3& light_direction, const Ray
 		specular = pow(cos(angle(r, view_direction)), hit.material.specularity);
 
 	return std::max(0.0f, specular);
+}
+
+void Scene::ray_trace_ppm_image(std::string filename) {
+	int subdivisions = options.sampling_amount / 4;
+	float quarter_pixel_width = float(viewport.width) / float(canvas.width) / 4;
+
+	image.open(filename + ".ppm");
+	image << "P3\n" << canvas.width << ' ' << canvas.height << "\n255\n";
+	for (int y = canvas.height / 2; y > -canvas.height / 2; y--) {
+		for (int x = -canvas.width / 2; x < canvas.width / 2; x++) {
+			Color color;
+			RaycastHit hit;
+			const Vector3 direction = canvas_to_viewport(canvas, viewport, x, y, 1) * camera.rotation;
+
+			// Default
+			if (options.sampling == 0) 
+				color = float_to_rgb_color(trace_ray(Ray(camera.position, direction), hit, 0, INFINITY, 3));
+
+			// Subsampling
+			if (options.sampling == 1)
+				color = float_to_rgb_color(trace_ray(Ray(camera.position, direction), hit, 0, INFINITY, 3));
+				
+			// Supersampling
+			if (options.sampling == 2) {
+				std::vector<Vector3> pixels(1, direction);
+				color = supersample_pixels(pixels, subdivisions, quarter_pixel_width);
+				color = float_to_rgb_color(color / (options.sampling_amount + 1));
+			}
+
+			put_pixel(x, y, color, image);
+		}
+	}
+}
+
+void Scene::ray_trace_with_subsampling(std::string filename, int count) {
+
+}
+
+// Recursively subdivides pixel and traces a ray for each subdivision (rays_casted = subdivisions * 4)
+Color Scene::supersample_pixels(const std::vector<Vector3>& pixels, int subdivisions, float offset) {
+	Color color;
+
+	if (subdivisions < 0) 
+		return color;
+
+	std::vector<Vector3> next_subdivision_pixels;
+
+	for (const Vector3& direction : pixels) {
+		RaycastHit hit;
+		color += trace_ray(Ray(camera.position, direction), hit, 0, INFINITY, 3);
+
+		next_subdivision_pixels.push_back(Vector3(direction.x - offset, direction.y - offset, direction.z));
+		next_subdivision_pixels.push_back(Vector3(direction.x + offset, direction.y - offset, direction.z));
+		next_subdivision_pixels.push_back(Vector3(direction.x - offset, direction.y + offset, direction.z));
+		next_subdivision_pixels.push_back(Vector3(direction.x + offset, direction.y + offset, direction.z));
+	}
+	return color + supersample_pixels(next_subdivision_pixels, --subdivisions, offset / 2);
 }
