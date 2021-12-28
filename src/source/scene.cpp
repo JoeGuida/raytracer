@@ -19,7 +19,7 @@ Color Scene::trace_ray(const Ray& ray, RaycastHit& hit, float tmin, float tmax, 
 
 	const Ray reflection_ray(ray.direction, hit.normal);
 	const Color reflected_color = trace_ray(reflection_ray, hit, tmin, tmax, --recursion_depth);
-	return color * (1 - reflectivity) + reflected_color * reflectivity;
+	return lerp(color, reflected_color, reflectivity);
 }
 
 bool Scene::intersects_object(const Ray& ray, float tmin, float tmax) {
@@ -104,7 +104,7 @@ float Scene::compute_lighting(RaycastHit& hit, const Ray& ray) {
 			Ray shadow_ray(hit.point, -light_direction);
 			if (!intersects_object(shadow_ray, shadow_bias, tmax)) {
 				lighting_value += light.intensity * compute_diffuse_lighting(light_direction, hit);
-				lighting_value += light.intensity * compute_specular_lighting(light_direction, hit, ray.direction);
+				lighting_value += light.intensity * compute_specular_lighting(light_direction, ray.direction, hit);
 			}
 		}
 	}
@@ -121,7 +121,7 @@ float Scene::compute_diffuse_lighting(const Vector3& light_direction, const Rayc
 	return std::max(0.0f, diffuse);
 }
 
-float Scene::compute_specular_lighting(const Vector3& light_direction, const RaycastHit& hit, const Vector3& view_direction) const {
+float Scene::compute_specular_lighting(const Vector3& light_direction, const Vector3& view_direction, const RaycastHit& hit) const {
 	float specular = 0;
 	const Vector3 r = hit.normal * 2 * dot_product(light_direction, hit.normal) - light_direction;
 	
@@ -132,7 +132,7 @@ float Scene::compute_specular_lighting(const Vector3& light_direction, const Ray
 }
 
 void Scene::ray_trace_ppm_image(std::string filename) {
-	int subdivisions = options.sampling_amount / 4;
+	int subdivisions = options.sampling_amount;
 	float quarter_pixel_width = float(viewport.width) / float(canvas.width) / 4;
 
 	image.open(filename + ".ppm");

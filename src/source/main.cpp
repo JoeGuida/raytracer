@@ -4,10 +4,21 @@
 
 int main() {
 	// Create the scene
-	const Canvas canvas(512, 512);
-	const Viewport viewport(1.5f, 1.5f);
+	const int CANVAS_WIDTH = 640;
+	const int CANVAS_HEIGHT = 360;
+	const float ASPECT_RATIO = float(CANVAS_WIDTH) / float(CANVAS_HEIGHT);
+
+	const float VIEWPORT_WIDTH = 2;
+	const float VIEWPORT_HEIGHT = VIEWPORT_WIDTH / ASPECT_RATIO;
+
+	const Canvas canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+	const Viewport viewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 	const Camera camera(Vector3(0, 0, 0), Matrix3D(1, 0, 0, 0, 1, 0, 0, 0, 1));
-	const Options options(2, 8, Color(128, 128, 128));
+
+	Options options;
+	options.set_supersampling_levels(2);
+	options.set_background_color(Color(128, 128, 128));
+
 	Scene scene(canvas, viewport, camera, options);
 
 	//Create some materials

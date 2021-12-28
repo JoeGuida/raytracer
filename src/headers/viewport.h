@@ -3,15 +3,15 @@
 
 typedef struct Viewport {
 
-	int width;
-	int height;
+	float width;
+	float height;
 
 	Viewport() {
 		width = 1;
 		height = 1;
 	}
 
-	Viewport(int x, int y) {
+	Viewport(float x, float y) {
 		width = x;
 		height = y;
 	}

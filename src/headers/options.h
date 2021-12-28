@@ -15,10 +15,18 @@ typedef struct Options {
 		background_color = Color(0, 0, 0);
 	}
 
-	Options(int s, int a, const Color& b) {
-		sampling = s;
-		sampling_amount = a;
-		background_color = b;
+	void set_supersampling_levels(int levels) {
+		sampling = 2;
+		sampling_amount = levels;
+	}
+
+	void set_subsampling_levels(int levels) {
+		sampling = 1;
+		sampling_amount = levels;
+	}
+
+	void set_background_color(const Color& color) {
+		background_color = color;
 	}
 
 } Options;

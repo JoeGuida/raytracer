@@ -1,6 +1,7 @@
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
+#include "mathhelpers.h"
 #include "options.h"
 #include "sphere.h"
 #include "plane.h"
@@ -59,7 +60,7 @@ typedef struct Scene {
 	float get_closest_intersection(const Ray& ray, RaycastHit& hit, float tmin, float tmax) const;
 	float compute_lighting(RaycastHit& hit, const Ray& ray);
 	float compute_diffuse_lighting(const Vector3& light_direction, const RaycastHit& hit) const;
-	float compute_specular_lighting(const Vector3& light_direction, const RaycastHit& hit, const Vector3& view_direction) const;
+	float compute_specular_lighting(const Vector3& light_direction, const Vector3& view_direction, const RaycastHit& hit) const;
 	void ray_trace_ppm_image(std::string filename);
 	void ray_trace_with_subsampling(std::string filename, int count);
 	Color supersample_pixels(const std::vector<Vector3>& pixels, int subdivisions, float offset);
