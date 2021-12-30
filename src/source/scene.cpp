@@ -145,17 +145,17 @@ void Scene::ray_trace_ppm_image(std::string filename) {
 
 			// Default
 			if (options.sampling == 0) 
-				color = float_to_rgb_color(trace_ray(Ray(camera.position, direction), hit, 0, INFINITY, 3));
+				color = float_to_rgb_color(trace_ray(Ray(camera.position, direction), hit, 0, INFINITY, options.recursion_depth));
 
 			// Subsampling
 			if (options.sampling == 1)
-				color = float_to_rgb_color(trace_ray(Ray(camera.position, direction), hit, 0, INFINITY, 3));
+				color = float_to_rgb_color(trace_ray(Ray(camera.position, direction), hit, 0, INFINITY, options.recursion_depth));
 				
 			// Supersampling
 			if (options.sampling == 2) {
 				std::vector<Vector3> pixels(1, direction);
 				color = supersample_pixels(pixels, subdivisions, quarter_pixel_width);
-				color = float_to_rgb_color(color / (pow(4, subdivisions)));
+				color = float_to_rgb_color(color / pow(4, subdivisions));
 			}
 
 			put_pixel(x, y, color, image);
@@ -163,18 +163,23 @@ void Scene::ray_trace_ppm_image(std::string filename) {
 	}
 }
 
-void Scene::ray_trace_with_subsampling(std::string filename, int count) {
+Vector3 compute_transparency_vector(const Ray& view_ray, const RaycastHit& hit, float refraction_index) {
+	Vector3 transparency_vector;
 
+	float theta = angle(view_ray.direction, hit.normal);
+	Vector3 b = (view_ray.direction + hit.normal * cos(theta)) / sin(theta);
+
+	float transparency = view_ray.refraction_index / hit.material.refraction_index;
 }
 
-// Recursively subdivides pixel and traces a ray for each subdivision (rays_casted = subdivisions * 4)
+// Recursively subdivides pixel and traces a ray for each subdivision (rays_casted = subdivisions ^ 4)
 Color Scene::supersample_pixels(const std::vector<Vector3>& pixels, int subdivisions, float offset) {
 	Color color;
 
 	if (subdivisions <= 0) {
 		for (const Vector3& direction : pixels) {
 			RaycastHit hit;
-			color += trace_ray(Ray(camera.position, direction), hit, 0, INFINITY, 3);
+			color += trace_ray(Ray(camera.position, direction), hit, 0, INFINITY, options.recursion_depth);
 		}
 		return color;
 	}

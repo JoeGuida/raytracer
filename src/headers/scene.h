@@ -13,8 +13,8 @@
 #include "camera.h"
 #include <vector>
 
-typedef struct Scene {
-
+class Scene {
+private:
 	// Object storage
 	std::vector<Sphere> spheres;
 	std::vector<Light> lights;
@@ -32,6 +32,16 @@ typedef struct Scene {
 	Options options;
 	std::ofstream image;
 
+	Color trace_ray(const Ray& ray, RaycastHit& hit, float tmin, float tmax, int recursion_depth);
+	bool intersects_object(const Ray& ray, float tmin, float tmax);
+	float get_closest_intersection(const Ray& ray, RaycastHit& hit, float tmin, float tmax) const;
+	float compute_lighting(RaycastHit& hit, const Ray& ray);
+	float compute_diffuse_lighting(const Vector3& light_direction, const RaycastHit& hit) const;
+	float compute_specular_lighting(const Vector3& light_direction, const Vector3& view_direction, const RaycastHit& hit) const;
+	Vector3 compute_transparency_vector(const Vector3& view_direction, const Vector3& normal);
+	Color supersample_pixels(const std::vector<Vector3>& pixels, int subdivisions, float offset);
+
+public:
 	// Debugging
 	static long rays_casted;
 
@@ -55,17 +65,9 @@ typedef struct Scene {
 		lights.push_back(light);
 	}
 
-	Color trace_ray(const Ray& ray, RaycastHit& hit, float tmin, float tmax, int recursion_depth);
-	bool intersects_object(const Ray& ray, float tmin, float tmax);
-	float get_closest_intersection(const Ray& ray, RaycastHit& hit, float tmin, float tmax) const;
-	float compute_lighting(RaycastHit& hit, const Ray& ray);
-	float compute_diffuse_lighting(const Vector3& light_direction, const RaycastHit& hit) const;
-	float compute_specular_lighting(const Vector3& light_direction, const Vector3& view_direction, const RaycastHit& hit) const;
 	void ray_trace_ppm_image(std::string filename);
-	void ray_trace_with_subsampling(std::string filename, int count);
-	Color supersample_pixels(const std::vector<Vector3>& pixels, int subdivisions, float offset);
 
-} Scene;
+};
 
 
 #endif

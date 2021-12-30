@@ -103,6 +103,7 @@
     <ClCompile Include="src\source\color.cpp" />
     <ClCompile Include="src\source\main.cpp" />
     <ClCompile Include="src\source\material.cpp" />
+    <ClCompile Include="src\source\mathhelpers.cpp" />
     <ClCompile Include="src\source\matrix.cpp" />
     <ClCompile Include="src\source\plane.cpp" />
     <ClCompile Include="src\source\scene.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="src\headers\camera.h" />
     <ClInclude Include="src\headers\canvas.h" />
     <ClInclude Include="src\headers\color.h" />
+    <ClInclude Include="src\headers\mathhelpers.h" />
     <ClInclude Include="src\headers\options.h" />
     <ClInclude Include="src\headers\raycasthit.h" />
     <ClInclude Include="src\headers\light.h" />

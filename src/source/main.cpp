@@ -18,11 +18,12 @@ int main() {
 	Options options;
 	options.set_supersampling_levels(2);
 	options.set_background_color(Color(128, 128, 128));
+	options.set_recursion_depth(3);
 
 	Scene scene(canvas, viewport, camera, options);
 
 	//Create some materials
-	const Material sphere0_material(Color(255, 0, 255), 10000, 0.25f);
+	const Material sphere0_material(Color(255, 0, 255), 10000, 0.0f, 1.52f, 0.5f);
 	const Material spere1_material(Color(0, 255, 255), 1000, 0.3f);
 	const Material sphere2_material(Color(255, 255, 255), 500, 0.0f);
 	const Material sphere3_material(Color(255, 255, 0), 1000, 1.0f);
