@@ -176,3 +176,88 @@ float angle(const Vector3& a, const Vector3& b) {
 float distance(const Vector3& a, const Vector3& b) {
 	return magnitude(a - b);
 }
+
+Vector4 operator +(const Vector4& a, const Vector4& b) {
+	return Vector4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
+}
+
+Vector4 operator +(const Vector4& v, float s) {
+	return Vector4(v.x + s, v.y + s, v.z + s, v.w + s);
+}
+
+Vector4 operator -(const Vector4& a, const Vector4& b) {
+	return Vector4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
+}
+
+Vector4 operator -(const Vector4& v, float s) {
+	return Vector4(v.x - s, v.y - s, v.z - s, v.w - s);
+}
+
+Vector4 operator -(const Vector4& v) {
+	return v * -1;
+}
+
+Vector4 operator *(const Vector4& a, const Vector4& b) {
+	return Vector4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
+}
+
+Vector4 operator *(const Vector4& v, float s) {
+	return Vector4(v.x * s, v.y * s, v.z * s, v.w * s);
+}
+
+Vector4 operator /(const Vector4& a, const Vector4& b) {
+	return Vector4(a.x * (1.f / b.x), a.y * (1.f / b.y), a.z * (1.f / b.z), a.w * (1.f / b.w));
+}
+
+Vector4 operator /(const Vector4& v, float s) {
+	s = 1.f / s;
+	return Vector4(v.x * s, v.y * s, v.z * s, v.w * s);
+}
+
+bool operator ==(const Vector4& l, const Vector4& r) {
+	return l.x == r.x && l.y == r.y && l.z == r.z && l.w == r.w;
+}
+
+bool operator !=(const Vector4& l, const Vector4& r) {
+	return !(l == r);
+}
+
+Vector4 normalized_vector(const Vector4& v)
+{
+	float m = magnitude(v);
+	if (m < 1.0f)
+		return Vector4(v.x / m, v.y / m, v.z / m, v.w / m);
+	else
+		return v;
+}
+
+float magnitude(const Vector4& v) {
+	return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w);
+}
+
+float dot_product(const Vector4& a, const Vector4& b) {
+	return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+
+Vector4 projection(const Vector4& a, const Vector4& b) {
+	float b_magnitude_squared = dot_product(b, b);
+	return b * (dot_product(a, b) / b_magnitude_squared);
+}
+
+Vector4 rejection(const Vector4& a, const Vector4& b) {
+	return a - projection(a, b);
+}
+
+Vector4 reflection(const Vector4& a, const Vector4& b) {
+	return a - projection(a, b) * 2;
+}
+
+float angle(const Vector4& a, const Vector4& b) {
+	float dot_a_b = dot_product(a, b);
+	float magnitude_a_b = magnitude(a) * magnitude(b);
+	return acos(dot_a_b / magnitude_a_b);
+}
+
+float distance(const Vector4& a, const Vector4& b) {
+	return magnitude(a - b);
+}

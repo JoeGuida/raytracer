@@ -38,6 +38,29 @@ typedef struct Vector3 {
 
 } Vector3;
 
+typedef struct Vector4 {
+	
+	float x;
+	float y;
+	float z;
+	float w;
+
+	Vector4() {
+		x = 0;
+		y = 0;
+		z = 0;
+		w = 0;
+	}
+
+	Vector4(float a, float b, float c, float d) {
+		x = a;
+		y = b;
+		z = c;
+		w = d;
+	}
+
+} Vector4;
+
 Vector2 operator +(const Vector2& a, const Vector2& b);
 Vector2 operator +(const Vector2& v, float s);
 Vector2 operator -(const Vector2& a, const Vector2& b);
