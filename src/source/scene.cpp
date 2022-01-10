@@ -5,31 +5,43 @@ long Scene::rays_casted = 0;
 
 Color Scene::trace_ray(const Ray& ray, RaycastHit& hit, float tmin, float tmax, int recursion_depth) {
 	rays_casted++;
+	Color color;
+	Color reflected_color;
+	Color refracted_color;
 
-	const float t = get_closest_intersection(ray, hit, tmin, tmax);
-	const float reflectivity = hit.material.reflectivity;
+	std::pair<float, float> t;
+	get_closest_intersection(ray, hit, tmin, tmax, t);
 
 	if (hit.is_null())
 		return options.background_color;
+		
+	color = float_to_rgb_color(hit.material.color * compute_lighting(hit, ray));
 
-	Color color = float_to_rgb_color(hit.material.color * compute_lighting(hit, ray));
-
-	if (recursion_depth <= 0 || reflectivity <= 0)
+	if (recursion_depth <= 0 || hit.material.reflectivity <= 0)
 		return color;
 
 	const Ray reflection_ray(ray.direction, hit.normal);
-	const Color reflected_color = trace_ray(reflection_ray, hit, tmin, tmax, --recursion_depth);
-	return lerp(color, reflected_color, reflectivity);
+	reflected_color = trace_ray(reflection_ray, hit, tmin, tmax, --recursion_depth);
+
+	if (hit.material.transparency > 0) {
+		Ray refraction_ray(hit.point, compute_refraction_vector(ray, hit));
+		get_closest_intersection(refraction_ray, hit, shadow_bias, tmax, t);
+		refraction_ray = Ray(hit.point, compute_refraction_vector(reflection_ray, hit), hit.material.refraction_index);
+		refracted_color = trace_ray(refraction_ray, hit, shadow_bias, tmax, --recursion_depth);
+
+		return lerp(lerp(color, refracted_color, hit.material.transparency), refracted_color, hit.material.transparency);
+	}
+	return lerp(color, reflected_color, hit.material.reflectivity);
 }
 
 bool Scene::intersects_object(const Ray& ray, float tmin, float tmax) {
-	float t1 = 0, t2 = 0;
+	std::pair<float, float> t;
 	const Sphere* closest_sphere = nullptr;
 
 	// Check last hit shadow sphere first
 	if (hit.object != nullptr) {
-		hit.object->raycast(ray, &t1, &t2);
-		if ((t1 > tmin && t1 < tmax && t1) || (t2 > tmin && t2 < tmax)) {
+		hit.object->raycast(ray, t);
+		if ((t.first > tmin && t.first < tmax) || (t.second > tmin && t.second < tmax)) {
 			return true;
 		}
 	}
@@ -39,12 +51,12 @@ bool Scene::intersects_object(const Ray& ray, float tmin, float tmax) {
 		if (&sphere == hit.object)
 			continue;
 
-		sphere.raycast(ray, &t1, &t2);
-		if (t1 > tmin && t1 < tmax && t1) {
+		sphere.raycast(ray, t);
+		if (t.first > tmin && t.first < tmax && t.first) {
 			hit.object = &sphere;
 			return true;
 		}
-		if (t2 > tmin && t2 < tmax && t2) {
+		if (t.second > tmin && t.second < tmax && t.second) {
 			hit.object = &sphere;
 			return true;
 		}
@@ -54,20 +66,18 @@ bool Scene::intersects_object(const Ray& ray, float tmin, float tmax) {
 	return false;
 }
 
-float Scene::get_closest_intersection(const Ray& ray, RaycastHit& hit, float tmin, float tmax) const {
+float Scene::get_closest_intersection(const Ray& ray, RaycastHit& hit, float tmin, float tmax, std::pair<float, float>& t) const {
 	float closest_t = INFINITY;
-	float t1 = 0, t2 = 0;
 	const Sphere* closest_sphere = nullptr;
 
 	for (const Sphere& sphere : spheres) {
-		sphere.raycast(ray, &t1, &t2);
-
-		if (t1 > tmin && t1 < tmax && t1 < closest_t) {
-			closest_t = t1;
+		sphere.raycast(ray, t);
+		if (t.first > tmin && t.first < tmax && t.first < closest_t) {
+			closest_t = t.first;
 			closest_sphere = &sphere;
 		}
-		if (t2 > tmin && t2 < tmax && t2 < closest_t) {
-			closest_t = t2;
+		if (t.second > tmin && t.second < tmax && t.second < closest_t) {
+			closest_t = t.second;
 			closest_sphere = &sphere;
 		}
 	}
@@ -82,7 +92,7 @@ float Scene::get_closest_intersection(const Ray& ray, RaycastHit& hit, float tmi
 	return closest_t;
 }
 
-float Scene::compute_lighting(RaycastHit& hit, const Ray& ray) {
+float Scene::compute_lighting(const RaycastHit& hit, const Ray& ray) {
 	float lighting_value = 0;
 	float tmax = 0;
 	Vector3 light_direction;
@@ -131,6 +141,19 @@ float Scene::compute_specular_lighting(const Vector3& light_direction, const Vec
 	return std::max(0.0f, specular);
 }
 
+Vector3 Scene::compute_refraction_vector(const Ray& view_ray, const RaycastHit& hit) {
+	Vector3 transparency_vector;
+
+	float theta = angle(view_ray.direction, hit.normal);
+	float n = view_ray.refraction_index / hit.material.refraction_index;
+
+	float c1 = cos(theta);
+	float c2 = sqrtf(1 - pow(n, 2) * (1 - pow(c1, 2)));
+
+	transparency_vector = (view_ray.direction * n) + hit.normal * (n * c1 - c2);
+	return transparency_vector;
+}
+
 void Scene::ray_trace_ppm_image(std::string filename) {
 	int subdivisions = options.sampling_amount;
 	float quarter_pixel_width = float(viewport.width) / float(canvas.width) / 4;
@@ -161,15 +184,6 @@ void Scene::ray_trace_ppm_image(std::string filename) {
 			put_pixel(x, y, color, image);
 		}
 	}
-}
-
-Vector3 compute_transparency_vector(const Ray& view_ray, const RaycastHit& hit, float refraction_index) {
-	Vector3 transparency_vector;
-
-	float theta = angle(view_ray.direction, hit.normal);
-	Vector3 b = (view_ray.direction + hit.normal * cos(theta)) / sin(theta);
-
-	float transparency = view_ray.refraction_index / hit.material.refraction_index;
 }
 
 // Recursively subdivides pixel and traces a ray for each subdivision (rays_casted = subdivisions ^ 4)

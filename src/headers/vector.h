@@ -62,46 +62,81 @@ typedef struct Vector4 {
 } Vector4;
 
 Vector2 operator +(const Vector2& a, const Vector2& b);
+Vector3 operator +(const Vector3& a, const Vector3& b);
+Vector4 operator +(const Vector4& a, const Vector4& b);
+
 Vector2 operator +(const Vector2& v, float s);
+Vector3 operator +(const Vector3& v, float s);
+Vector4 operator +(const Vector4& v, float s);
+
 Vector2 operator -(const Vector2& a, const Vector2& b);
+Vector3 operator -(const Vector3& a, const Vector3& b);
+Vector4 operator -(const Vector4& a, const Vector4& b);
+
 Vector2 operator -(const Vector2& v, float s);
+Vector3 operator -(const Vector3& v, float s);
+Vector4 operator -(const Vector4& v, float s);
+
 Vector2 operator -(const Vector2& v);
+Vector3 operator -(const Vector3& v);
+Vector4 operator -(const Vector4& v);
+
 Vector2 operator *(const Vector2& a, const Vector2& b);
+Vector3 operator *(const Vector3& a, const Vector3& b);
+Vector4 operator *(const Vector4& a, const Vector4& b);
+
 Vector2 operator *(const Vector2& v, float s);
+Vector3 operator *(const Vector3& v, float s);
+Vector4 operator *(const Vector4& v, float s);
+
 Vector2 operator /(const Vector2& a, const Vector2& b);
+Vector3 operator /(const Vector3& a, const Vector3& b);
+Vector4 operator /(const Vector4& a, const Vector4& b);
+
 Vector2 operator /(const Vector2& v, float s);
+Vector3 operator /(const Vector3& v, float s);
+Vector4 operator /(const Vector4& v, float s);
+
 bool operator ==(const Vector2& l, const Vector2& r);
+bool operator ==(const Vector3& l, const Vector3& r);
+bool operator ==(const Vector4& l, const Vector4& r);
+
 bool operator !=(const Vector2& l, const Vector2& r);
+bool operator !=(const Vector3& l, const Vector3& r);
+bool operator !=(const Vector4& l, const Vector4& r);
 
 Vector2 normalized_vector(const Vector2& v);
-float magnitude(const Vector2& v);
-float dot_product(const Vector2& a, const Vector2& b);
-Vector2 projection(const Vector2& a, const Vector2& b);
-Vector2 rejection(const Vector2& a, const Vector2& b);
-Vector2 reflection(const Vector2& a, const Vector2& b);
-float angle(const Vector2& a, const Vector2& b);
-float distance(const Vector2& a, const Vector2& b);
-
-Vector3 operator +(const Vector3& a, const Vector3& b);
-Vector3 operator +(const Vector3& v, float s);
-Vector3 operator -(const Vector3& a, const Vector3& b);
-Vector3 operator -(const Vector3& v, float s);
-Vector3 operator -(const Vector3& v);
-Vector3 operator *(const Vector3& a, const Vector3& b);
-Vector3 operator *(const Vector3& v, float s);
-Vector3 operator /(const Vector3& a, const Vector3& b);
-Vector3 operator /(const Vector3& v, float s);
-bool operator ==(const Vector3& l, const Vector3& r);
-bool operator !=(const Vector3& l, const Vector3& r);
-
 Vector3 normalized_vector(const Vector3& v);
+Vector4 normalized_vector(const Vector4& v);
+
+float magnitude(const Vector2& v);
 float magnitude(const Vector3& v);
+float magnitude(const Vector4& v);
+
+float dot_product(const Vector2& a, const Vector2& b);
 float dot_product(const Vector3& a, const Vector3& b);
+float dot_product(const Vector4& a, const Vector4& b);
+
 Vector3 cross_product(const Vector3& a, const Vector3& b);
+
+Vector2 projection(const Vector2& a, const Vector2& b);
 Vector3 projection(const Vector3& a, const Vector3& b);
+Vector4 projection(const Vector4& a, const Vector4& b);
+
+Vector2 rejection(const Vector2& a, const Vector2& b);
 Vector3 rejection(const Vector3& a, const Vector3& b);
+Vector4 rejection(const Vector4& a, const Vector4& b);
+
+Vector2 reflection(const Vector2& a, const Vector2& b);
 Vector3 reflection(const Vector3& a, const Vector3& b);
+Vector4 reflection(const Vector4& a, const Vector4& b);
+
+float angle(const Vector2& a, const Vector2& b);
 float angle(const Vector3& a, const Vector3& b);
+float angle(const Vector4& a, const Vector4& b);
+
+float distance(const Vector2& a, const Vector2& b);
 float distance(const Vector3& a, const Vector3& b);
+float distance(const Vector4& a, const Vector4& b);
 
 #endif

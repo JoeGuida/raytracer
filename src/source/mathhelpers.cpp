@@ -1,4 +1,4 @@
-#include "mathhelpers.h"
+#include "../headers/mathhelpers.h"
 
 float lerp(float a, float b, float x) {
 	return a * (1 - x) + b * x;

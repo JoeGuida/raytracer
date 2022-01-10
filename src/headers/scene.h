@@ -34,11 +34,11 @@ private:
 
 	Color trace_ray(const Ray& ray, RaycastHit& hit, float tmin, float tmax, int recursion_depth);
 	bool intersects_object(const Ray& ray, float tmin, float tmax);
-	float get_closest_intersection(const Ray& ray, RaycastHit& hit, float tmin, float tmax) const;
-	float compute_lighting(RaycastHit& hit, const Ray& ray);
+	float get_closest_intersection(const Ray& ray, RaycastHit& hit, float tmin, float tmax, std::pair<float, float>& t) const;
+	float compute_lighting(const RaycastHit& hit, const Ray& ray);
 	float compute_diffuse_lighting(const Vector3& light_direction, const RaycastHit& hit) const;
 	float compute_specular_lighting(const Vector3& light_direction, const Vector3& view_direction, const RaycastHit& hit) const;
-	Vector3 compute_transparency_vector(const Vector3& view_direction, const Vector3& normal);
+	Vector3 compute_refraction_vector(const Ray& view_ray, const RaycastHit& hit);
 	Color supersample_pixels(const std::vector<Vector3>& pixels, int subdivisions, float offset);
 
 public:
