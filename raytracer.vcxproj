@@ -27,22 +27,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -108,6 +108,7 @@
     <ClCompile Include="src\source\plane.cpp" />
     <ClCompile Include="src\source\scene.cpp" />
     <ClCompile Include="src\source\sphere.cpp" />
+    <ClCompile Include="src\source\triangle.cpp" />
     <ClCompile Include="src\source\vector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +117,7 @@
     <ClInclude Include="src\headers\color.h" />
     <ClInclude Include="src\headers\mathhelpers.h" />
     <ClInclude Include="src\headers\options.h" />
+    <ClInclude Include="src\headers\primitive.h" />
     <ClInclude Include="src\headers\raycasthit.h" />
     <ClInclude Include="src\headers\light.h" />
     <ClInclude Include="src\headers\material.h" />
@@ -125,6 +127,7 @@
     <ClInclude Include="src\headers\ray.h" />
     <ClInclude Include="src\headers\scene.h" />
     <ClInclude Include="src\headers\sphere.h" />
+    <ClInclude Include="src\headers\triangle.h" />
     <ClInclude Include="src\headers\vector.h" />
     <ClInclude Include="src\headers\viewport.h" />
   </ItemGroup>
