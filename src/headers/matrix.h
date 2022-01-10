@@ -8,8 +8,8 @@ typedef struct Matrix2D {
 	float n[2][2];
 
 	Matrix2D() {
-		n[0][0] = 0; n[0][1] = 0;
-		n[1][0] = 0; n[1][1] = 0;
+		n[0][0] = 1; n[0][1] = 0;
+		n[1][0] = 0; n[1][1] = 1;
 	}
 
 	Matrix2D(float n00, float n01, 
@@ -24,7 +24,7 @@ typedef struct Matrix2D {
 	}
 
 	float operator ()(int i, int j) const {
-		return n[j][i];
+		return n[i][j];
 	}
 
 	Vector2& operator [](int i) {
@@ -38,9 +38,9 @@ typedef struct Matrix3D {
 	float n[3][3];
 
 	Matrix3D() {
-		n[0][0] = 0; n[0][1] = 0; n[0][2] = 0;
-		n[1][0] = 0; n[1][1] = 0; n[1][2] = 0;
-		n[2][0] = 0; n[2][1] = 0; n[2][2] = 0;
+		n[0][0] = 1; n[0][1] = 0; n[0][2] = 0;
+		n[1][0] = 0; n[1][1] = 1; n[1][2] = 0;
+		n[2][0] = 0; n[2][1] = 0; n[2][2] = 1;
 	}
 
 	Matrix3D(float n00, float n01, float n02, 
@@ -72,10 +72,10 @@ typedef struct Matrix4D {
 	float n[4][4];
 
 	Matrix4D() {
-		n[0][0] = 0; n[0][1] = 0; n[0][2] = 0;
-		n[1][0] = 0; n[1][1] = 0; n[1][2] = 0;
-		n[2][0] = 0; n[2][1] = 0; n[2][2] = 0;
-		n[3][0] = 0; n[3][1] = 0; n[3][2] = 0;
+		n[0][0] = 1; n[0][1] = 0; n[0][2] = 0; n[0][3] = 0;
+		n[1][0] = 0; n[1][1] = 1; n[1][2] = 0; n[1][3] = 0;
+		n[2][0] = 0; n[2][1] = 0; n[2][2] = 1; n[2][3] = 0;
+		n[3][0] = 0; n[3][1] = 0; n[3][2] = 0; n[3][3] = 1;
 	}
 
 	Matrix4D(float n00, float n01, float n02, float n03,
@@ -105,6 +105,38 @@ typedef struct Matrix4D {
 
 } Matrix4D;
 
+Matrix2D operator *(const Matrix2D& a, Matrix2D& b);
+Matrix3D operator *(const Matrix3D& a, Matrix3D& b);
+Matrix4D operator *(const Matrix4D& a, Matrix4D& b);
+
+Matrix2D transpose(const Matrix2D& matrix);
+Matrix3D transpose(const Matrix3D& matrix);
+Matrix4D transpose(const Matrix4D& matrix);
+
+float determinant(const Matrix2D& m);
+float determinant(const Matrix3D& m);
+float determinant(const Matrix4D& m);
+
+Matrix2D cut(const Matrix2D& matrix, int row, int col);
+
+Matrix2D minor(const Matrix2D& matrix);
+Matrix3D minor(const Matrix3D& matrix);
+Matrix4D minor(const Matrix4D& matrix);
+
+void cofactor(float* out, const float* minor, int rows, int cols);
+Matrix2D cofactor(const Matrix2D& matrix);
+Matrix3D cofactor(const Matrix3D& matrix);
+Matrix4D cofactor(const Matrix4D& matrix);
+
+Matrix2D adjugate(const Matrix2D& matrix);
+Matrix3D adjugate(const Matrix3D& matrix);
+Matrix4D adjugate(const Matrix4D& matrix);
+
+Matrix2D inverse(const Matrix2D& matrix);
+Matrix3D inverse(const Matrix3D& matrix);
+Matrix4D inverse(const Matrix4D& matrix);
+
+// Other
 Vector3 operator *(const Vector3& v, const Matrix3D& m);
 
 #endif
