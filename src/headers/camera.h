@@ -4,21 +4,23 @@
 #include "vector.h"
 #include "matrix.h"
 
-typedef struct Camera {
+class Camera {
 
-	Vector3 position;
+	float fov;
+	float aspect;
+	float near;
+	float far;
+	float width;
+	float height;
+
+	Matrix4D world_transform;
+	Matrix4D projection_matrix;
+
+	int projection_mode; // 0 - Perspective, 1 - Orthographic
+
+public:
 	Matrix3D rotation;
-
-	Camera() {
-		position = Vector3(0, 0, 0);
-		rotation = Matrix3D(0, 0, 0, 0, 0, 0, 0, 0, 0);
-	}
-
-	Camera(Vector3 p, Matrix3D r) {
-		position = p;
-		rotation = r;
-	}
-
-} Camera;
+	Vector3 position;
+};
 
 #endif
