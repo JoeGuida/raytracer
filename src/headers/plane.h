@@ -1,11 +1,12 @@
 #ifndef _PLANE_H_
 #define _PLANE_H_
 
+#include "primitive.h"
 #include "vector.h"
 #include "material.h"
 #include "ray.h"
 
-typedef struct Plane {
+typedef struct Plane : Primitive {
 
 	Vector3 normal;
 	float distance;
@@ -23,7 +24,7 @@ typedef struct Plane {
 		material = m;
 	}
 
-	float raycast(const Ray& ray) const;
+	void raycast(const Ray& ray, std::pair<float, float>& t) const;
 	Vector3 get_normal(const Point& point) const;
 
 } Plane;

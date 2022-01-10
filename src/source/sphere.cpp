@@ -1,9 +1,6 @@
 #include "../headers/sphere.h"
-#include <cmath>
 
-float Sphere::raycast(const Ray& ray, float* t1, float* t2) const {
-	*t1 = 0, *t2 = 0;
-
+void Sphere::raycast(const Ray& ray, std::pair<float, float>& t) const {
 	float r = radius;
 	Vector3 o = ray.origin;
 	Vector3 d = ray.direction;
@@ -15,11 +12,12 @@ float Sphere::raycast(const Ray& ray, float* t1, float* t2) const {
 
 	float discriminant = b * b - 4 * a * c;
 	if (discriminant < magnitude(o)) {
-		return INFINITY, INFINITY;
+		t = std::pair<float, float>(INFINITY, INFINITY);
+		return;
 	}
 
-	*t1 = (-b + discriminant / 2 * a);
-	*t2 = (-b - discriminant / 2 * a);
+	t.first = (-b + discriminant / 2 * a);
+	t.second = (-b - discriminant / 2 * a);
 }
 
 Vector3 Sphere::get_normal(const Point& point) const {
