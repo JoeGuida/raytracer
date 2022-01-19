@@ -1,6 +1,7 @@
 #ifndef _MATRIX_H_
 #define _MATRIX_H_
 
+#include <string>
 #include "vector.h"
 
 typedef struct Matrix2D {
@@ -105,6 +106,10 @@ typedef struct Matrix4D {
 
 } Matrix4D;
 
+Matrix2D operator *(const Matrix2D& m, float s);
+Matrix3D operator *(const Matrix3D& m, float s);
+Matrix4D operator *(const Matrix4D& m, float s);
+
 Matrix2D operator *(const Matrix2D& a, Matrix2D& b);
 Matrix3D operator *(const Matrix3D& a, Matrix3D& b);
 Matrix4D operator *(const Matrix4D& a, Matrix4D& b);
@@ -117,14 +122,12 @@ float determinant(const Matrix2D& m);
 float determinant(const Matrix3D& m);
 float determinant(const Matrix4D& m);
 
-Matrix2D cut(const Matrix2D& matrix, int row, int col);
+Matrix2D cut(const Matrix3D& matrix, int row, int col);
+Matrix3D cut(const Matrix4D& matrix, int row, int col);
 
-Matrix2D minor(const Matrix2D& matrix);
 Matrix3D minor(const Matrix3D& matrix);
 Matrix4D minor(const Matrix4D& matrix);
 
-void cofactor(float* out, const float* minor, int rows, int cols);
-Matrix2D cofactor(const Matrix2D& matrix);
 Matrix3D cofactor(const Matrix3D& matrix);
 Matrix4D cofactor(const Matrix4D& matrix);
 
@@ -136,6 +139,25 @@ Matrix2D inverse(const Matrix2D& matrix);
 Matrix3D inverse(const Matrix3D& matrix);
 Matrix4D inverse(const Matrix4D& matrix);
 
+Matrix4D translation(float x, float y, float z);
+Matrix4D translation(const Vector3& pos);
+Vector3 get_translation(const Matrix4D& matrix);
+
+Matrix4D scale(float x, float y, float z);
+Matrix4D scale(const Vector3& v);
+Vector3 get_scale(const Matrix4D& matrix);
+
+Matrix4D rotation(float pitch, float yaw, float roll);
+Matrix3D rotation_3D(float pitch, float yaw, float roll);
+
+Matrix4D x_rotation(float theta);
+Matrix4D y_rotation(float theta);
+Matrix4D z_rotation(float theta);
+
+Matrix3D x_rotation_3D(float theta);
+Matrix3D y_rotation_3D(float theta);
+Matrix3D z_rotation_3D(float theta);
+ 
 // Other
 Vector3 operator *(const Vector3& v, const Matrix3D& m);
 
