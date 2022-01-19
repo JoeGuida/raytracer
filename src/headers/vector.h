@@ -1,6 +1,8 @@
 #ifndef _VECTOR_H_
 #define _VECTOR_H_
 
+#include "mathhelpers.h"
+
 typedef struct Vector2 {
 
 	float x;
@@ -39,7 +41,7 @@ typedef struct Vector3 {
 } Vector3;
 
 typedef struct Vector4 {
-	
+
 	float x;
 	float y;
 	float z;
@@ -97,13 +99,13 @@ Vector2 operator /(const Vector2& v, float s);
 Vector3 operator /(const Vector3& v, float s);
 Vector4 operator /(const Vector4& v, float s);
 
-bool operator ==(const Vector2& l, const Vector2& r);
-bool operator ==(const Vector3& l, const Vector3& r);
-bool operator ==(const Vector4& l, const Vector4& r);
+bool operator ==(const Vector2& a, const Vector2& b);
+bool operator ==(const Vector3& a, const Vector3& b);
+bool operator ==(const Vector4& a, const Vector4& b);
 
-bool operator !=(const Vector2& l, const Vector2& r);
-bool operator !=(const Vector3& l, const Vector3& r);
-bool operator !=(const Vector4& l, const Vector4& r);
+bool operator !=(const Vector2& a, const Vector2& b);
+bool operator !=(const Vector3& a, const Vector3& b);
+bool operator !=(const Vector4& a, const Vector4& b);
 
 Vector2 normalized_vector(const Vector2& v);
 Vector3 normalized_vector(const Vector3& v);

@@ -38,8 +38,8 @@ Vector2 operator /(const Vector2& v, float s) {
 	return Vector2(v.x * s, v.y * s);
 }
 
-bool operator ==(const Vector2& l, const Vector2& r) {
-	return l.x == r.x && l.y == r.y;
+bool operator ==(const Vector2& a, const Vector2& b) {
+	return cmp_float(a.x, b.x) && cmp_float(a.y, b.y);
 }
 
 bool operator !=(const Vector2& l, const Vector2& r) {
@@ -123,8 +123,8 @@ Vector3 operator /(const Vector3& v, float s) {
 	return Vector3(v.x * s, v.y * s, v.z * s);
 }
 
-bool operator ==(const Vector3& l, const Vector3& r) {
-	return l.x == r.x && l.y == r.y && l.z == r.z;
+bool operator ==(const Vector3& a, const Vector3& b) {
+	return cmp_float(a.x, b.x) && cmp_float(a.y, b.y) && cmp_float(a.z, b.z);
 }
 
 bool operator !=(const Vector3& l, const Vector3& r) {
@@ -214,8 +214,8 @@ Vector4 operator /(const Vector4& v, float s) {
 	return Vector4(v.x * s, v.y * s, v.z * s, v.w * s);
 }
 
-bool operator ==(const Vector4& l, const Vector4& r) {
-	return l.x == r.x && l.y == r.y && l.z == r.z && l.w == r.w;
+bool operator ==(const Vector4& a, const Vector4& b) {
+	return cmp_float(a.x, b.x) && cmp_float(a.y, b.y) && cmp_float(a.z, b.z) && cmp_float(a.w, b.w);
 }
 
 bool operator !=(const Vector4& l, const Vector4& r) {
