@@ -157,6 +157,17 @@ Matrix4D z_rotation(float theta);
 Matrix3D x_rotation_3D(float theta);
 Matrix3D y_rotation_3D(float theta);
 Matrix3D z_rotation_3D(float theta);
+
+Matrix4D axis_angle(const Vector3& axis, float angle);
+Matrix3D axis_angle_3D(const Vector3& axis, float angle);
+
+Matrix4D transform(const Vector3& scale_vector, const Vector3& euler_rotation, const Vector3& translation_vector);
+Matrix4D transform(const Vector3& scale_vector, const Vector3& rotation_axis, float rotation_angle, const Vector3& translation_vector);
+
+Matrix4D look_at(const Vector3& position, const Vector3& target, const Vector3& up);
+
+Matrix4D projection(float fov, float aspect_ratio, float near, float far);
+Matrix4D orthographic(float left, float right, float bottom, float top, float near, float far);
  
 // Other
 Vector3 operator *(const Vector3& v, const Matrix3D& m);
