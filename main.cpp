@@ -3,9 +3,9 @@
 
 #include "camera.hpp"
 #include "filesystem.hpp"
-#include "rectangle.hpp"
 #include "renderer.hpp"
 #include "shader.hpp"
+#include "triangle.hpp"
 
 #include <iostream>
 
@@ -30,7 +30,11 @@ Camera camera(
     glm::radians(90.0f),
     Transform(glm::vec3(0.0f, 0.0f, 3.0f))
 );
-constexpr float CAMERA_VELOCITY = 0.075f;
+constexpr float CAMERA_VELOCITY = 0.00075f;
+
+bool wireframe = false;
+bool move_forward = false;
+bool move_back = false;
 
 int main() {
     GLFWwindow* window = initialize_window();
@@ -41,15 +45,16 @@ int main() {
         FileSystem::get_path("/default.frag"));
 
     BRDFMaterial red_material(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f), 0.0f);
-    GL_Rectangle rectangle(
-        1.0f, 
-        0.5f, 
-        red_material,
-        Transform()
+    GL_Triangle triangle(
+        glm::vec3(0.0f, -0.25f, 0.0f),
+        glm::vec3(-0.5f, 0.0f, 0.0f),
+        glm::vec3(0.0f, 0.5f, 0.0f),
+        glm::vec3(0.5f, 0.0f, 0.0f),
+        red_material
     );
 
     glm::mat4 view;
-    glm::mat4 projection = glm::ortho(-ASPECT_RATIO, ASPECT_RATIO, -1.0, 1.0, 0.01, 100.0);
+    glm::mat4 projection = glm::perspective(static_cast<double>(camera.fov_radians), ASPECT_RATIO, 0.01, 100.0);
     default_shader.set_uniform("projection", projection);
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
@@ -60,13 +65,19 @@ int main() {
         if (mouse_button_pressed) {
             camera.rotate(cursor_delta * CAMERA_VELOCITY * -1.0f);
         }
+        if (move_forward) {
+            camera.transform.position += camera.front * CAMERA_VELOCITY;
+        }
+        if (move_back) {
+            camera.transform.position -= camera.front * CAMERA_VELOCITY;
+        }
 
         view = glm::lookAt(
             camera.transform.position,
             camera.transform.position + camera.front, glm::vec3(0.0f, 1.0f, 0.0f));
         default_shader.set_uniform("view", view);
 
-        Renderer::draw(rectangle, default_shader);
+        Renderer::draw(triangle, default_shader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -108,8 +119,6 @@ GLFWwindow* initialize_window() {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
     }
@@ -130,5 +139,27 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void process_input(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+        if (!wireframe) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            wireframe = true;
+        }
+        else {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            wireframe = false;
+        }
+    }
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        move_forward = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_RELEASE) {
+        move_forward = false;
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        move_back = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_RELEASE) {
+        move_back = false;
     }
 }

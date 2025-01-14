@@ -9,6 +9,7 @@
 #include "rectangle.hpp"
 #include "shader.hpp"
 #include "transform.hpp"
+#include "triangle.hpp"
 
 class Renderer {
 private:
@@ -19,6 +20,7 @@ private:
 public:
     static void initialize();
     static void draw(const GL_Rectangle& rectangle, Shader& shader);
+    static void draw(const GL_Triangle& triangle, Shader& shader);
 };
 
 #endif
