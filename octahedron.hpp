@@ -15,7 +15,7 @@ public:
 
     Octahedron(const GL_Sphere& sphere) {
         float r = sphere.radius;
-        float r2 = sphere.radius * 0.7;
+        float r2 = sphere.radius * 0.7f;
         std::array<glm::vec3, 6> vertices{
             glm::vec3(0.0f, r2, -r2),
             glm::vec3(0.0f, r2, r2),

@@ -11,8 +11,8 @@ void Renderer::initialize() {
 }
 
 void Renderer::draw(const GL_Rectangle& rectangle, Shader& shader) {
-    std::array<float, 12> vertices = rectangle.get_vertices();
-    std::array<uint32_t, 6> indices = rectangle.get_indices();
+    std::array<float, 24> vertices = rectangle.get_vertices();
+    std::array<uint32_t, 36> indices = rectangle.get_indices();
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -30,7 +30,7 @@ void Renderer::draw(const GL_Rectangle& rectangle, Shader& shader) {
     shader.set_uniform("model", model);
     shader.set_uniform("color", rectangle.material.diffuse);
 
-    glDrawElements(GL_TRIANGLES, sizeof(indices), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 }
 
 void Renderer::draw(const GL_Triangle& triangle, Shader& shader) {
@@ -67,7 +67,7 @@ void Renderer::draw(const std::vector<GL_Triangle>& triangles, Shader& shader) {
     shader.set_uniform("model", model);
     shader.set_uniform("color", triangles[0].material.diffuse);
 
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, triangles.size());
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, static_cast<GLsizei>(triangles.size()));
 }
 
 void Renderer::draw(const GL_Sphere& sphere, Shader& shader) {

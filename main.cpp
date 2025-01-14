@@ -3,7 +3,9 @@
 
 #include "camera.hpp"
 #include "filesystem.hpp"
+#include "rectangle.hpp"
 #include "renderer.hpp"
+#include "rng.hpp"
 #include "shader.hpp"
 #include "sphere.hpp"
 
@@ -22,13 +24,15 @@ constexpr int SCREEN_HEIGHT = 720;
 constexpr double ASPECT_RATIO = SCREEN_WIDTH / static_cast<float>(SCREEN_HEIGHT);
 
 bool mouse_button_pressed = false;
-double lastX = SCREEN_WIDTH / 2.0;
-double lastY = SCREEN_HEIGHT / 2.0;
+double last_x = SCREEN_WIDTH / 2.0;
+double last_y = SCREEN_HEIGHT / 2.0;
 glm::vec2 cursor_delta(0.0f);
+
+constexpr glm::vec3 world_up(0.0f, 1.0f, 0.0f);
 
 Camera camera(
     glm::vec3(0.0f, 0.0f, -1.0f),
-    glm::vec3(0.0f, 1.0f, 0.0f),
+    world_up,
     glm::radians(90.0f),
     Transform(glm::vec3(0.0f, 0.0f, 3.0f))
 );
@@ -53,13 +57,14 @@ int main() {
         FileSystem::get_path("/default.vert"),
         FileSystem::get_path("/default.frag"));
 
-    BRDFMaterial red_material(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f), 0.0f);
-    GL_Sphere sphere(
-        glm::vec3(0.0f),
-        1.0f,
-        3,
-        red_material
-    );
+    glm::vec3 color(
+        Random::get_random_number(0.0f, 1.0f), 
+        Random::get_random_number(0.0f, 1.0f), 
+        Random::get_random_number(0.0f, 1.0f));
+    BRDFMaterial mat(color + 0.2f, glm::vec3(0.0f), 0.0f);
+    
+    GL_Sphere sphere(glm::vec3(0.0f), 1.0f, 3, mat);
+    GL_Rectangle rectangle(glm::vec3(1.0f), mat, Transform(glm::vec3(0.0f)));
 
     glm::mat4 view;
     glm::mat4 projection = glm::perspective(static_cast<double>(camera.fov_radians), ASPECT_RATIO, 0.01, 100.0);
@@ -67,7 +72,7 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
 
-        current_frame_time = glfwGetTime();
+        current_frame_time = static_cast<float>(glfwGetTime());
         delta_time = current_frame_time - last_frame_time;
         last_frame_time = current_frame_time;
 
@@ -75,12 +80,11 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         move_camera();
-        view = glm::lookAt(
-            camera.transform.position,
-            camera.transform.position + camera.front, glm::vec3(0.0f, 1.0f, 0.0f));
+        view = glm::lookAt(camera.transform.position,camera.transform.position + camera.front, world_up);
         default_shader.set_uniform("view", view);
 
-        Renderer::draw(sphere, default_shader);
+        //Renderer::draw(sphere, default_shader);
+        Renderer::draw(rectangle, default_shader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -91,15 +95,15 @@ int main() {
 }
 
 void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos) {
-    double x_diff = (xpos - lastX) / SCREEN_HEIGHT;
-    double y_diff = (ypos - lastY) / SCREEN_WIDTH;
+    double x_diff = (xpos - last_x) / SCREEN_HEIGHT;
+    double y_diff = (ypos - last_y) / SCREEN_WIDTH;
     x_diff = (fabs(x_diff) > 0.01f) ? x_diff : 0.0f;
     y_diff = (fabs(y_diff) > 0.01f) ? y_diff : 0.0f;
 
     cursor_delta = glm::vec2(x_diff, y_diff);
 
-    lastX = xpos;
-    lastY = ypos;
+    last_x = xpos;
+    last_y = ypos;
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
