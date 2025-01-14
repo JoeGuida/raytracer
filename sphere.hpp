@@ -16,4 +16,13 @@ struct Sphere : Shape {
 	bool intersects(const Ray& ray, Hit& hit) const override;
 };
 
+struct GL_Sphere {
+	glm::vec3 position;
+	float radius;
+	int depth;
+	BRDFMaterial material;
+
+	GL_Sphere(const glm::vec3& position, float radius, int depth, const BRDFMaterial& material) : position(position), radius(radius), depth(depth), material(material) {}
+};
+
 #endif

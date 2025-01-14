@@ -1,6 +1,7 @@
 #ifndef RAYTRACER_RAY_HPP
 #define RAYTRACER_RAY_HPP
 
+#include "glm/geometric.hpp"
 #include "glm/vec3.hpp"
 
 struct Ray {

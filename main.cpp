@@ -5,7 +5,7 @@
 #include "filesystem.hpp"
 #include "renderer.hpp"
 #include "shader.hpp"
-#include "triangle.hpp"
+#include "sphere.hpp"
 
 #include <iostream>
 
@@ -13,7 +13,9 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 GLFWwindow* initialize_window();
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void move_camera();
 void process_input(GLFWwindow* window);
+
 
 constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;
@@ -30,11 +32,18 @@ Camera camera(
     glm::radians(90.0f),
     Transform(glm::vec3(0.0f, 0.0f, 3.0f))
 );
-constexpr float CAMERA_VELOCITY = 0.00075f;
+constexpr float CAMERA_MOVEMENT_VELOCITY = 3.0f;
+constexpr float CAMERA_ROTATION_VELOCITY = 100.0f;
 
 bool wireframe = false;
 bool move_forward = false;
 bool move_back = false;
+bool move_left = false;
+bool move_right = false;
+
+float delta_time = 0.0f;
+float last_frame_time = 0.0f;
+float current_frame_time = 0.0f;
 
 int main() {
     GLFWwindow* window = initialize_window();
@@ -45,11 +54,10 @@ int main() {
         FileSystem::get_path("/default.frag"));
 
     BRDFMaterial red_material(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f), 0.0f);
-    GL_Triangle triangle(
-        glm::vec3(0.0f, -0.25f, 0.0f),
-        glm::vec3(-0.5f, 0.0f, 0.0f),
-        glm::vec3(0.0f, 0.5f, 0.0f),
-        glm::vec3(0.5f, 0.0f, 0.0f),
+    GL_Sphere sphere(
+        glm::vec3(0.0f),
+        1.0f,
+        3,
         red_material
     );
 
@@ -59,25 +67,20 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         process_input(window);
 
+        current_frame_time = glfwGetTime();
+        delta_time = current_frame_time - last_frame_time;
+        last_frame_time = current_frame_time;
+
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (mouse_button_pressed) {
-            camera.rotate(cursor_delta * CAMERA_VELOCITY * -1.0f);
-        }
-        if (move_forward) {
-            camera.transform.position += camera.front * CAMERA_VELOCITY;
-        }
-        if (move_back) {
-            camera.transform.position -= camera.front * CAMERA_VELOCITY;
-        }
-
+        move_camera();
         view = glm::lookAt(
             camera.transform.position,
             camera.transform.position + camera.front, glm::vec3(0.0f, 1.0f, 0.0f));
         default_shader.set_uniform("view", view);
 
-        Renderer::draw(triangle, default_shader);
+        Renderer::draw(sphere, default_shader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -136,6 +139,24 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     }
 }
 
+void move_camera() {
+    if (mouse_button_pressed) {
+        camera.rotate(cursor_delta * CAMERA_ROTATION_VELOCITY * -1.0f * delta_time);
+    }
+    if (move_forward) {
+        camera.transform.position += camera.front * CAMERA_MOVEMENT_VELOCITY * delta_time;
+    }
+    if (move_back) {
+        camera.transform.position -= camera.front * CAMERA_MOVEMENT_VELOCITY * delta_time;
+    }
+    if (move_left) {
+        camera.transform.position -= camera.right * CAMERA_MOVEMENT_VELOCITY * delta_time;
+    }
+    if (move_right) {
+        camera.transform.position += camera.right * CAMERA_MOVEMENT_VELOCITY * delta_time;
+    }
+}
+
 void process_input(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
@@ -161,5 +182,17 @@ void process_input(GLFWwindow* window) {
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_RELEASE) {
         move_back = false;
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        move_left = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_RELEASE) {
+        move_left = false;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        move_right = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_RELEASE) {
+        move_right = false;
     }
 }
