@@ -6,8 +6,7 @@
 
 #include <array>
 
-#include "octahedron.hpp"
-#include "rng.hpp"
+#include "cylinder.hpp"
 #include "rectangle.hpp"
 #include "shader.hpp"
 #include "sphere.hpp"
@@ -22,11 +21,10 @@ private:
 
 public:
     static void initialize();
+    static void draw(const GL_Cylinder& cylinder, Shader& shader);
     static void draw(const GL_Rectangle& rectangle, Shader& shader);
     static void draw(const GL_Triangle& triangle, Shader& shader);
-    static void draw(const std::vector<GL_Triangle>& triangles, Shader& shader);
     static void draw(const GL_Sphere& sphere, Shader& shader);
-    static void subdivide_triangle(const GL_Triangle& triangle, const BRDFMaterial& material, int depth, std::vector<GL_Triangle>& tris);
 };
 
 #endif

@@ -2,6 +2,7 @@
 #include "GLFW/glfw3.h"
 
 #include "camera.hpp"
+#include "cylinder.hpp"
 #include "filesystem.hpp"
 #include "rectangle.hpp"
 #include "renderer.hpp"
@@ -14,10 +15,10 @@
 void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 GLFWwindow* initialize_window();
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void move_camera();
 void process_input(GLFWwindow* window);
-
 
 constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;
@@ -44,6 +45,7 @@ bool move_forward = false;
 bool move_back = false;
 bool move_left = false;
 bool move_right = false;
+bool raytrace_scene = false;
 
 float delta_time = 0.0f;
 float last_frame_time = 0.0f;
@@ -64,7 +66,8 @@ int main() {
     BRDFMaterial mat(color + 0.2f, glm::vec3(0.0f), 0.0f);
     
     GL_Sphere sphere(glm::vec3(0.0f), 1.0f, 3, mat);
-    GL_Rectangle rectangle(glm::vec3(1.0f), mat, Transform(glm::vec3(0.0f)));
+    GL_Rectangle rectangle(glm::vec3(sphere.radius), sphere.material, sphere.position);
+    GL_Cylinder cylinder(glm::vec3(0.0f), 1.0f, 2.0f, 32, mat);
 
     glm::mat4 view;
     glm::mat4 projection = glm::perspective(static_cast<double>(camera.fov_radians), ASPECT_RATIO, 0.01, 100.0);
@@ -84,13 +87,18 @@ int main() {
         default_shader.set_uniform("view", view);
 
         //Renderer::draw(sphere, default_shader);
-        Renderer::draw(rectangle, default_shader);
+        //Renderer::draw(rectangle, default_shader);
+        //Renderer::draw(cylinder, default_shader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
     glfwTerminate();
+
+    if (raytrace_scene) {
+        // do raytracing
+    }
+
 	return 0;
 }
 
@@ -124,6 +132,7 @@ GLFWwindow* initialize_window() {
     glfwMakeContextCurrent(window);
     glfwSetCursorPosCallback(window, cursor_pos_callback);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(window, key_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -132,6 +141,22 @@ GLFWwindow* initialize_window() {
     glEnable(GL_DEPTH_TEST);
 
     return window;
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS) {
+        if (wireframe) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
+        else {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        }
+        wireframe = !wireframe;
+    }
+    if (key == GLFW_KEY_R) {
+        glfwSetWindowShouldClose(window, true);
+        raytrace_scene = true;
+    }
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
@@ -164,16 +189,6 @@ void move_camera() {
 void process_input(GLFWwindow* window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
-    }
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-        if (!wireframe) {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            wireframe = true;
-        }
-        else {
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            wireframe = false;
-        }
     }
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         move_forward = true;
