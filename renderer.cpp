@@ -24,7 +24,7 @@ void Renderer::draw(const GL_Cylinder& cylinder, Shader& shader) {
     shader.set_uniform("model", model);
     shader.set_uniform("color", cylinder.material.diffuse);
 
-    glDrawElements(GL_TRIANGLE_STRIP, static_cast<GLsizei>(cylinder.indices.size()), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, cylinder.indices.size(), GL_UNSIGNED_INT, 0);
 }
 
 void Renderer::draw(const GL_Rectangle& rectangle, Shader& shader) {

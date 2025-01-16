@@ -1,8 +1,8 @@
 #ifndef RAYTRACER_CYLINDER_HPP
 #define RAYTRACER_CYLINDER_HPP
-
 #define GLM_ENABLE_EXPERIMENTAL
-#define E_PI 3.1415926f
+
+#define PI 3.14159265358979323846
 
 #include "glm/vec3.hpp"
 #include "glm/gtx/rotate_vector.hpp"
@@ -28,25 +28,28 @@ struct GL_Cylinder {
 	float height;
 	int segments;
 	BRDFMaterial material;
-	std::vector<glm::vec3> vertices;
+	std::vector<float> vertices;
 	std::vector<uint32_t> indices;
 
 	GL_Cylinder(const glm::vec3& position, float radius, float height, int segments, const BRDFMaterial& material) : 
 		position(position), radius(radius), height(height), segments(segments), material(material) 
 	{
 		glm::vec3 bottom_center = position - glm::vec3(0.0f, (height / 2.0f), 0.0f);
-		vertices.push_back(bottom_center);
-		indices.push_back(0);
+		glm::vec3 top_center = position + glm::vec3(0.0f, (height / 2.0f), 0.0f);
+		float angle = static_cast<float>(2 * PI / segments);
 
-		glm::vec3 a = bottom_center + glm::vec3(radius, 0.0f, 0.0f);
-		for (int i = 0; i < segments; i++) {
-			vertices.push_back(a);
-			a = glm::rotate(a, 15.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-			indices.push_back(i + 1);
+		for (int i = 0; i < segments + 1; i++) {
+			glm::vec3 v = glm::rotate(bottom_center + glm::vec3(radius, 0.0f, 0.0f), angle * i, glm::vec3(0.0, 1.0f, 0.0f));
+			vertices.push_back(v.x);
+			vertices.push_back(v.y);
+			vertices.push_back(v.z);
 		}
 
-		glm::vec3 top_center = position + glm::vec3(0.0f, (height / 2.0f), 0.0f);
-
+		for (int i = 1; i < vertices.size() / 3 - 1; i++) {
+			indices.push_back(0);
+			indices.push_back(i);
+			indices.push_back(i + 1);
+		}
 	}
 
 };

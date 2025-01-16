@@ -67,7 +67,7 @@ int main() {
     
     GL_Sphere sphere(glm::vec3(0.0f), 1.0f, 3, mat);
     GL_Rectangle rectangle(glm::vec3(sphere.radius), sphere.material, sphere.position);
-    GL_Cylinder cylinder(glm::vec3(0.0f), 1.0f, 2.0f, 32, mat);
+    GL_Cylinder cylinder(glm::vec3(0.0f), 1.0f, 2.0f, 16, mat);
 
     glm::mat4 view;
     glm::mat4 projection = glm::perspective(static_cast<double>(camera.fov_radians), ASPECT_RATIO, 0.01, 100.0);
@@ -88,7 +88,7 @@ int main() {
 
         //Renderer::draw(sphere, default_shader);
         //Renderer::draw(rectangle, default_shader);
-        //Renderer::draw(cylinder, default_shader);
+        Renderer::draw(cylinder, default_shader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

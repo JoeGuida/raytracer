@@ -1,10 +1,10 @@
 #ifndef RAYTRACER_RENDERER_HPP
 #define RAYTRACER_RENDERER_HPP
 
+#include <array>
+
 #include <glad/glad.h>
 #include <glm/vec3.hpp>
-
-#include <array>
 
 #include "cylinder.hpp"
 #include "rectangle.hpp"
