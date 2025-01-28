@@ -4,3 +4,4 @@ x32/
 *.vcxproj.*
 *.sln
 .vs/
+*.ppm
