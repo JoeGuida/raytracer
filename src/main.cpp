@@ -30,7 +30,7 @@ struct Ray {
 	glm::vec3 direction;
 
 	Ray(const glm::vec3& origin, const glm::vec3& direction) : origin(origin), direction(glm::normalize(direction)) {}
-	
+
 	bool intersects(const Sphere& sphere, Hit& hit) {
 		glm::vec3 a = sphere.center - origin;
 		glm::vec3 b = glm::proj(a, direction);
@@ -59,7 +59,7 @@ struct Camera {
 		float pixel_height = 1.0f / height;
 		glm::vec3 offset(pixel_width * x, pixel_height * y, 0.0f);
 		Ray ray(position, front + offset);
-		
+
 		for (int i = 0; i < spheres.size(); i++) {
 			Hit hit;
 			if (ray.intersects(spheres[i], hit)) {
