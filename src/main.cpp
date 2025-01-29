@@ -5,6 +5,7 @@
 #include "glm/gtx/projection.hpp"
 
 #include "camera.hpp"
+#include "rectangle.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "sphere.hpp"
@@ -14,8 +15,8 @@
 #include <random>
 #include <vector>
 
-constexpr int SCREEN_WIDTH = 1920;
-constexpr int SCREEN_HEIGHT = 1080;
+constexpr int SCREEN_WIDTH = 400;
+constexpr int SCREEN_HEIGHT = 400;
 constexpr glm::vec3 BACKGROUND_COLOR(0.1f);
 
 int main() {
@@ -33,8 +34,11 @@ int main() {
 
 	for (int i = 0; i < 125; i++) {
 		Sphere* sphere = new Sphere(glm::vec3(x_dist(rng), y_dist(rng), z_dist(rng)), radius_dist(rng), Material(glm::vec3(color_dist(rng), color_dist(rng), color_dist(rng))));
-		scene.add(sphere);
+		//scene.add(sphere);
 	}
+
+	Rectangle* rectangle = new Rectangle(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.2f), Material(glm::vec3(1.0f, 0.0f, 0.0f)));
+	scene.add(rectangle);
 
 	std::ofstream file("image.ppm");
 	Renderer::raytrace_image(file, scene);

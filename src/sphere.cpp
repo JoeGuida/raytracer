@@ -25,13 +25,13 @@ bool Sphere::intersects(const Ray& ray, Hit& hit) const {
 
 	if (t0 < t1 && t0 > 0.0f) {
 		hit.material = material;
-		hit.normal = p0 - center;
+		hit.normal = glm::normalize(p0 - center);
 		hit.point = p0;
 		hit.t = t0;
 	}
 	else if(t1 < t0 && t1 > 0.0f){
 		hit.material = material;
-		hit.normal = p1 - center;
+		hit.normal = glm::normalize(p1 - center);
 		hit.point = p1;
 		hit.t = t1;
 	}
