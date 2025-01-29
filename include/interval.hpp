@@ -9,10 +9,11 @@
 struct Interval {
 	float t0;
 	float t1;
+	glm::vec3 n0;
+	glm::vec3 n1;
 
 	Interval() : t0(0.0f), t1(INFINITY) {}
-	Interval(float t0, float t1) : t0(t0), t1(t1) {}
-	Interval(const Interval&);
+	Interval(const Interval&) = default;
 	Interval(Interval&&) = default;
 	virtual ~Interval() = default;
 	Interval& operator=(const Interval& other) {
@@ -24,6 +25,10 @@ struct Interval {
 		float temp = t0;
 		t0 = t1;
 		t1 = temp;
+
+		glm::vec3 temp_n = n0;
+		n0 = n1;
+		n1 = n0;
 	}
 };
 

@@ -31,6 +31,7 @@ glm::vec3 Renderer::trace_ray(const Ray& ray, const Scene& scene) {
 	std::vector<const Shape*> objects = scene.get_objects();
 	for (int i = 0; i < objects.size(); i++) {
 		Hit hit;
+
 		if (objects[i]->intersects(ray, hit)) {
 			switch (render_mode) {
 			case RenderMode::BASE_COLOR: {

@@ -37,7 +37,7 @@ int main() {
 		//scene.add(sphere);
 	}
 
-	Rectangle* rectangle = new Rectangle(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.2f), Material(glm::vec3(1.0f, 0.0f, 0.0f)));
+	Rectangle* rectangle = new Rectangle(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.3f), Material(glm::vec3(1.0f, 0.0f, 0.0f)));
 	scene.add(rectangle);
 
 	std::ofstream file("image.ppm");
