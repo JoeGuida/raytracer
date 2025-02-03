@@ -3,18 +3,12 @@
 
 #include "glm/vec3.hpp"
 
+#include "rendermode.hpp"
 #include "scene.hpp"
 
 #include <fstream>
 
 constexpr float RGB_MAX = 255.99f;
-
-enum class RenderMode {
-	BASE_COLOR,
-	DEPTH,
-	NORMAL,
-	BOUNDING_BOX
-};
 
 class Renderer {
 private:

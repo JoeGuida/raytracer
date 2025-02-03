@@ -12,7 +12,7 @@ struct Interval {
 	glm::vec3 n0;
 	glm::vec3 n1;
 
-	Interval() : t0(0.0f), t1(INFINITY) {}
+	Interval() : t0(0.0f), t1(INFINITY), n0(glm::vec3(0.0f)), n1(glm::vec3(0.0f)) {}
 	Interval(const Interval&) = default;
 	Interval(Interval&&) = default;
 	virtual ~Interval() = default;

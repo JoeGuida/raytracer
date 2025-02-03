@@ -1,15 +1,6 @@
-#include "rectangle.hpp"
+#include "box.hpp"
 
-bool Rectangle::intersects(const Ray& ray, Hit& hit) const {
-	static std::array<Plane, 6> planes{
-		Plane(glm::vec3(1.0f, 0.0f, 0.0f),  -position.x),
-		Plane(glm::vec3(1.0f, 0.0f, 0.0f),  -position.x - size.x), // x planes
-		Plane(glm::vec3(0.0f, 1.0f, 0.0f), -position.y),
-		Plane(glm::vec3(0.0f, 1.0f, 0.0f), -position.y - size.y), // y planes
-		Plane(glm::vec3(0.0f, 0.0f, 1.0f), -position.z),
-		Plane(glm::vec3(0.0f, 0.0f, 1.0f), -position.z - size.z) // z planes
-	};
-	
+bool Box::intersects(const Ray& ray, Hit& hit) const {
 	Interval interval;
 	for (int i = 0; i < planes.size(); i += 2) {
 		float t0 = 0.0f;

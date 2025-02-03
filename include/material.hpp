@@ -7,6 +7,14 @@ struct Material {
 	glm::vec3 color;
 
 	Material(const glm::vec3& color) : color(color) {}
+	Material(const Material&) = default;
+	Material(Material&&) = default;
+	virtual ~Material() = default;
+
+	Material& operator=(const Material& material) {
+		color = material.color;
+		return *this;
+	}
 };
 
 #endif

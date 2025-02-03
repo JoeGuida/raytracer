@@ -12,6 +12,9 @@ struct Hit {
 	float t;
 
 	Hit() : material(glm::vec3(0.0f)), normal(glm::vec3(0.0f)), point(glm::vec3(0.0f)), t(0.0f) {}
+	Hit(const Hit&) = default;
+	Hit(Hit&&) = default;
+	virtual ~Hit() = default;
 };
 
 #endif

@@ -9,6 +9,9 @@ struct Ray {
 	glm::vec3 direction;
 
 	Ray(const glm::vec3& origin, const glm::vec3& direction) : origin(origin), direction(glm::normalize(direction)) {}
+	Ray(const Ray&) = default;
+	Ray(Ray&&) = default;
+	virtual ~Ray() = default;
 };
 
 #endif
