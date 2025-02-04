@@ -25,7 +25,7 @@ public:
 	static void raytrace_image(std::ofstream& file, const Scene& scene);
 	static float calculate_blinn_phong(Hit& hit, const Scene& scene);
 	static float calculate_diffuse(const glm::vec3& normal, const glm::vec3 light_direction);
-	static float calculate_specular(const glm::vec3& normal, const glm::vec3 light_direction);
+	static float calculate_specular(const glm::vec3& light_direction, const glm::vec3 camera_position, const Hit& hit);
 };
 
 

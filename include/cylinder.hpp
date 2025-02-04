@@ -6,7 +6,6 @@
 #include "hit.hpp"
 #include "interval.hpp"
 #include "material.hpp"
-#include "plane.hpp"
 #include "ray.hpp"
 #include "shape.hpp"
 

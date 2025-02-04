@@ -26,6 +26,8 @@ public:
 	float ambient;
 
 	Scene() {}
+	Scene(int width, int height, const glm::vec3& background_color, const Camera& camera) : 
+		width(width), height(height), background_color(background_color), camera(camera), ambient(0.0f) {}
 	Scene(const Scene&) = default;
 	Scene(Scene&&) = default;
 	virtual ~Scene() = default;

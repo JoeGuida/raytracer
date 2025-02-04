@@ -89,8 +89,8 @@ float Renderer::calculate_blinn_phong(Hit& hit, const Scene& scene) {
 	float specular = 0.0f;
 
 	for (const Light* light : scene.get_lights()) {
-		diffuse += calculate_diffuse(hit.normal, light->get_direction(hit.point));
-		specular += calculate_specular(hit.normal, light->get_direction(hit.point));
+		diffuse += calculate_diffuse(hit.normal, light->get_direction(hit.point)) * light->get_intensity();
+		specular += calculate_specular(light->get_direction(hit.point), scene.camera.position, hit) * light->get_intensity();
 	}
 
 	float blinn_phong = ambient + diffuse + specular;
@@ -98,11 +98,15 @@ float Renderer::calculate_blinn_phong(Hit& hit, const Scene& scene) {
 }
 
 float Renderer::calculate_diffuse(const glm::vec3& normal, const glm::vec3 light_direction) {
-	return std::max(glm::dot(normal, light_direction), 0.0f);
+	float diffuse = glm::dot(normal, light_direction);
+	return std::max(diffuse, 0.0f);
 }
 
-float Renderer::calculate_specular(const glm::vec3& normal, const glm::vec3 light_direction) {
-	return 0.0f;
+float Renderer::calculate_specular(const glm::vec3& light_direction, const glm::vec3 camera_position, const Hit& hit) {
+	glm::vec3 view_direction = camera_position - hit.point;
+	glm::vec3 h = glm::normalize(light_direction + view_direction);
+	float specular = std::powf(glm::dot(hit.normal, h), hit.material.specularity);
+	return std::max(specular, 0.0f);
 }
 
 

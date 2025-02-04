@@ -34,24 +34,27 @@ void exectue_command(const SceneTag& tag, const std::vector<std::string>& args, 
 		break;
 	}
 	case SceneTag::BOX: {
-		assert(args.size() == 12 + 1);
-		glm::vec3 size(std::stof(args[1]), std::stof(args[2]), std::stof(args[3]));
-		glm::vec3 pos(std::stof(args[4]), std::stof(args[5]), std::stof(args[6]));
+		assert(args.size() == 10 + 1);
+		glm::vec3 min(std::stof(args[1]), std::stof(args[2]), std::stof(args[3]));
+		glm::vec3 max(std::stof(args[4]), std::stof(args[5]), std::stof(args[6]));
 
 		if (flip_y_and_z_axis) {
-			size = glm::vec3(size.x, size.z, size.y);
-			pos = glm::vec3(pos.x, pos.z, pos.y);
+			min = glm::vec3(min.x, min.z, min.y);
+			max = glm::vec3(max.x, max.z, max.y);
 		}
 
 		if (invert_y_axis) {
-			pos.y *= -1.0f;
+			min.y *= -1.0f;
+			max.y *= -1.0f;
 		}
 		if (invert_z_axis) {
-			pos.z *= -1.0f;
+			min.z *= -1.0f;
+			max.z *= -1.0f;
 		}
 		
-		glm::vec3 diffuse(std::stof(args[10]), std::stof(args[11]), std::stof(args[12]));
-		Box* box = new Box(pos, size, Material(diffuse));
+		glm::vec3 diffuse(std::stof(args[7]), std::stof(args[8]), std::stof(args[9]));
+		int specularity = std::stoi(args[10]);
+		Box* box = new Box(min, max, Material(diffuse, specularity));
 		scene.add(box);
 		break;
 	}
@@ -84,10 +87,11 @@ void exectue_command(const SceneTag& tag, const std::vector<std::string>& args, 
 		break;
 	}
 	case SceneTag::SPHERE: {
-		assert(args.size() == 7 + 1);
+		assert(args.size() == 8 + 1);
 		float radius = std::stof(args[1]);
 		glm::vec3 center(std::stof(args[2]), std::stof(args[3]), std::stof(args[4]));
 		glm::vec3 diffuse(std::stof(args[5]), std::stof(args[6]), std::stof(args[7]));
+		int specularity = std::stoi(args[8]);
 
 		if (flip_y_and_z_axis) {
 			center = glm::vec3(center.x, center.z, center.y);
@@ -100,7 +104,7 @@ void exectue_command(const SceneTag& tag, const std::vector<std::string>& args, 
 			center.z *= -1.0f;
 		}
 
-		Sphere* sphere = new Sphere(center, radius, Material(diffuse));
+		Sphere* sphere = new Sphere(center, radius, Material(diffuse, specularity));
 		scene.add(sphere);
 		break;
 	}
