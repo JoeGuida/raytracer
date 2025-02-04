@@ -23,6 +23,9 @@ public:
 	static void initialize(int width, int height, const glm::vec3 background_color, const RenderMode& mode);
 	static glm::vec3 trace_ray(const Ray& ray, const Scene& scene);
 	static void raytrace_image(std::ofstream& file, const Scene& scene);
+	static float calculate_blinn_phong(Hit& hit, const Scene& scene);
+	static float calculate_diffuse(const glm::vec3& normal, const glm::vec3 light_direction);
+	static float calculate_specular(const glm::vec3& normal, const glm::vec3 light_direction);
 };
 
 

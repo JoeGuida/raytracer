@@ -26,6 +26,7 @@ struct Box : Shape {
 			Plane(glm::vec3(0.0f, 0.0f, 1.0f), -position.z - size.z)
 		};
 	}
+
 	Box(const Box&) = default;
 	Box(Box&&) = default;
 	virtual ~Box() = default;

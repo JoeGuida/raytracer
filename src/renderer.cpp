@@ -50,6 +50,10 @@ glm::vec3 Renderer::trace_ray(const Ray& ray, const Scene& scene) {
 				return hit.material.color;
 				break;
 			};
+			case RenderMode::BLINN_PHONG: {
+				return calculate_blinn_phong(hit, scene) * hit.material.color;
+				break;
+			}
 			}
 		}
 	}
@@ -77,6 +81,28 @@ void Renderer::raytrace_image(std::ofstream& file, const Scene& scene) {
 		}
 	}
 	file.close();
+}
+
+float Renderer::calculate_blinn_phong(Hit& hit, const Scene& scene) {
+	float ambient = scene.ambient;
+	float diffuse = 0.0f;
+	float specular = 0.0f;
+
+	for (const Light* light : scene.get_lights()) {
+		diffuse += calculate_diffuse(hit.normal, light->get_direction(hit.point));
+		specular += calculate_specular(hit.normal, light->get_direction(hit.point));
+	}
+
+	float blinn_phong = ambient + diffuse + specular;
+	return std::min(blinn_phong, 1.0f);
+}
+
+float Renderer::calculate_diffuse(const glm::vec3& normal, const glm::vec3 light_direction) {
+	return std::max(glm::dot(normal, light_direction), 0.0f);
+}
+
+float Renderer::calculate_specular(const glm::vec3& normal, const glm::vec3 light_direction) {
+	return 0.0f;
 }
 
 

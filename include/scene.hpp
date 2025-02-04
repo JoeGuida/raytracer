@@ -3,6 +3,7 @@
 
 #include "box.hpp"
 #include "camera.hpp"
+#include "light.hpp"
 #include "rendermode.hpp"
 #include "shape.hpp"
 #include "sphere.hpp"
@@ -15,12 +16,14 @@
 class Scene {
 private:
 	std::vector<const Shape*> objects;
+	std::vector<const Light*> lights;
 
 public:
 	Camera camera;
 	int width;
 	int height;
 	glm::vec3 background_color;
+	float ambient;
 
 	Scene() {}
 	Scene(const Scene&) = default;
@@ -31,11 +34,19 @@ public:
 		objects.push_back(shape); 
 	}
 
+	void add(const Light* light) {
+		lights.push_back(light);
+	}
+
 	const std::vector<const Shape*> get_objects() const { 
 		return objects; 
 	}
 
-	static Scene load_from_file(const std::string& filepath, bool flip_y_and_z_axis = false, bool invert_z_axis = false);
+	const std::vector<const Light*> get_lights() const {
+		return lights;
+	}
+
+	static Scene load_from_file(const std::string& filepath, bool flip_y_and_z_axis = false, bool invert_y_axis = false, bool invert_z_axis = false);
 };
 
 #endif

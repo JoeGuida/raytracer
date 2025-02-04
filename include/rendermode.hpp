@@ -5,7 +5,8 @@ enum class RenderMode {
 	BASE_COLOR,
 	DEPTH,
 	NORMAL,
-	BOUNDING_BOX
+	BOUNDING_BOX,
+	BLINN_PHONG
 };
 
 #endif
