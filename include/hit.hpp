@@ -14,6 +14,15 @@ struct Hit {
 	Hit() : material(glm::vec3(0.0f), 32), normal(glm::vec3(0.0f)), point(glm::vec3(0.0f)), t(0.0f) {}
 	Hit(const Hit&) = default;
 	Hit(Hit&&) = default;
+
+	Hit& operator=(const Hit& hit) {
+		material = hit.material;
+		normal = hit.normal;
+		point = hit.point;
+		t = hit.t;
+		return *this;
+	}
+
 	virtual ~Hit() = default;
 };
 

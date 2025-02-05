@@ -17,9 +17,9 @@ struct Sphere : public Shape {
 	Sphere(Sphere&&) = default;
 	virtual ~Sphere() = default;
 	
-	virtual bool intersects(const Ray& ray, Hit& hit) const override;
-	virtual Material get_material() const override { return material; }
-	virtual glm::vec3 get_pos() const override { return center; }
+	bool intersects(const Ray& ray, Hit& hit) const override;
+	Material get_material() const override { return material; }
+	glm::vec3 get_pos() const override { return center; }
 };
 
 #endif

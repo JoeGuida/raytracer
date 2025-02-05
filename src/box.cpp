@@ -4,31 +4,16 @@ bool Box::intersects(const Ray& ray, Hit& hit) const {
 	Interval interval;
 
 	for (const Slab& slab : slabs) {
-		Interval slab_interval(0.0f, INFINITY, slab.normal, -slab.normal);
-		float NdotD = glm::dot(slab.normal, ray.direction);
-		float NdotO = glm::dot(slab.normal, ray.origin);
+		Interval i = slab.intersection(ray);
 
-		if (NdotD == 0.0f) {
-			continue;
+		if (i.t0 > interval.t0) {
+			interval.t0 = i.t0;
+			interval.n0 = i.n0;
 		}
 
-		float t0 = -(slab.d0 + NdotO) / NdotD;
-		float t1 = -(slab.d1 + NdotO) / NdotD;
-		slab_interval.t0 = t0;
-		slab_interval.t1 = t1;
-
-		if (t0 > t1) {
-			slab_interval.swap();
-		}
-
-		if (slab_interval.t0 > interval.t0) {
-			interval.t0 = slab_interval.t0;
-			interval.n0 = slab_interval.n0;
-		}
-
-		if (slab_interval.t1 < interval.t1) {
-			interval.t1 = slab_interval.t1;
-			interval.n1 = slab_interval.n1;
+		if (i.t1 < interval.t1) {
+			interval.t1 = i.t1;
+			interval.n1 = i.n1;
 		}
 	}
 

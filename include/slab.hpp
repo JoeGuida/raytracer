@@ -4,6 +4,10 @@
 #include "glm/geometric.hpp"
 #include "glm/vec3.hpp"
 
+#include "hit.hpp"
+#include "interval.hpp"
+#include "ray.hpp"
+
 struct Slab {
 	glm::vec3 normal;
 	float d0;
@@ -21,6 +25,8 @@ struct Slab {
 		d1 = slab.d1;
 		return *this;
 	}
+
+	Interval intersection(const Ray& ray) const;
 };
 
 #endif

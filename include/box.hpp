@@ -9,11 +9,14 @@
 #include "slab.hpp"
 #include "shape.hpp"
 
-struct Box : Shape {
+class Box : public Shape {
+private:
+	std::array<Slab, 3> slabs;
+
+public:
 	glm::vec3 min;
 	glm::vec3 max;
 	Material material;
-	std::array<Slab, 3> slabs;
 
 	Box(const glm::vec3& min, const glm::vec3& max, const Material& material) : min(min), max(max), material(material)
 	{
@@ -28,9 +31,9 @@ struct Box : Shape {
 	Box(Box&&) = default;
 	virtual ~Box() = default;
 
-	virtual bool intersects(const Ray& ray, Hit& hit) const;
-	virtual Material get_material() const override { return material; }
-	virtual glm::vec3 get_pos() const override { return min; }
+	bool intersects(const Ray& ray, Hit& hit) const;
+	Material get_material() const override { return material; }
+	glm::vec3 get_pos() const override { return max; }
 };
 
 #endif
