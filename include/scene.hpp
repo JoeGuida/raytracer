@@ -3,13 +3,16 @@
 
 #include "box.hpp"
 #include "camera.hpp"
+#include "cylinder.hpp"
 #include "light.hpp"
 #include "rendermode.hpp"
 #include "shape.hpp"
 #include "sphere.hpp"
 
+#include <exception>
 #include <fstream>
 #include <iostream>
+#include <unordered_map>
 #include <string>
 #include <vector>
 
@@ -19,36 +22,28 @@ private:
 	std::vector<const Light*> lights;
 
 public:
-	Camera camera;
 	int width;
 	int height;
-	glm::vec3 background_color;
 	float ambient;
+	glm::vec3 background_color;
+	Camera camera;
 
 	Scene() {}
-	Scene(int width, int height, const glm::vec3& background_color, const Camera& camera) : 
-		width(width), height(height), background_color(background_color), camera(camera), ambient(0.0f) {}
+	Scene(int width, int height, float ambient, const glm::vec3& background_color, const Camera& camera) : 
+		width(width), height(height), ambient(ambient), background_color(background_color), camera(camera) {}
 	Scene(const Scene&) = default;
 	Scene(Scene&&) = default;
 	virtual ~Scene() = default;
 
-	void add(const Shape* shape) { 
-		objects.push_back(shape); 
-	}
+	void add(const Camera& cam)   { camera = cam; }
+	void add(const Camera&& cam)  { camera = cam; }
+	void add(const Shape* shape)  { objects.push_back(shape); }
+	void add(const Light* light)  { lights.push_back(light); }
 
-	void add(const Light* light) {
-		lights.push_back(light);
-	}
+	const std::vector<const Shape*> get_objects() const { return objects; }
+	const std::vector<const Light*> get_lights()  const { return lights; }
 
-	const std::vector<const Shape*> get_objects() const { 
-		return objects; 
-	}
-
-	const std::vector<const Light*> get_lights() const {
-		return lights;
-	}
-
-	static Scene load_from_file(const std::string& filepath, bool flip_y_and_z_axis = false, bool invert_y_axis = false, bool invert_z_axis = false);
+	static void load_from_file(const std::string& filepath, Scene& scene);
 };
 
 #endif

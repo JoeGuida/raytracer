@@ -5,3 +5,6 @@ x32/
 *.sln
 .vs/
 *.ppm
+*.ply
+*.x
+*.scene

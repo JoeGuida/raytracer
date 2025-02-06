@@ -7,6 +7,17 @@ float Renderer::max_distance = 0.0f;
 glm::vec3 Renderer::background_color = glm::vec3(0.1f, 0.1f, 0.1f);
 RenderMode Renderer::render_mode = RenderMode::BASE_COLOR;
 
+float Renderer::get_closest_object_hit(const std::vector<const Shape*>& objects, const Ray& ray, Hit& hit) {
+	float min_t = INFINITY;
+	for (const Shape* object : objects) {
+		if (object->intersects(ray, hit) && hit.t < min_t) {
+			min_t = hit.t;
+		}
+	}
+
+	return min_t;
+}
+
 void Renderer::initialize(int width, int height, const glm::vec3 background_color, const RenderMode& mode) {
 	screen_width = width;
 	screen_height = height;
@@ -31,35 +42,27 @@ glm::vec3 Renderer::trace_ray(const Ray& ray, const Scene& scene) {
 	std::vector<const Shape*> objects = scene.get_objects();
 	for (int i = 0; i < objects.size(); i++) {
 		Hit hit;
-		Hit closest_hit;
-		float closest_t = INFINITY;
-		if (objects[i]->intersects(ray, hit)) {
-			if (hit.t < closest_t) {
-				closest_t = hit.t;
-				closest_hit = hit;
-			}
-		}
-
+		float closest_t = get_closest_object_hit(objects, ray, hit);
 		if(closest_t != INFINITY) {
 			switch (render_mode) {
 			case RenderMode::BASE_COLOR: {
-				return closest_hit.material.color;
+				return hit.material.color;
 				break;
 			};
 			case RenderMode::DEPTH: {
-				return glm::vec3(closest_hit.t / max_distance, closest_hit.t / max_distance, closest_hit.t / max_distance);
+				return glm::vec3(hit.t / max_distance, hit.t / max_distance, hit.t / max_distance);
 				break;
 			};
 			case RenderMode::NORMAL: {
-				return glm::vec3(fabsf(closest_hit.normal.x), fabsf(closest_hit.normal.y), fabsf(closest_hit.normal.z));
+				return glm::vec3(fabsf(hit.normal.x), fabsf(hit.normal.y), fabsf(hit.normal.z));
 				break;
 			};
 			case RenderMode::BOUNDING_BOX: {
-				return closest_hit.material.color;
+				return hit.material.color;
 				break;
 			};
 			case RenderMode::BLINN_PHONG: {
-				return calculate_blinn_phong(closest_hit, scene) * closest_hit.material.color;
+				return calculate_blinn_phong(hit, scene) * hit.material.color;
 				break;
 			}
 			}
@@ -74,15 +77,20 @@ void Renderer::raytrace_image(std::ofstream& file, const Scene& scene) {
 		max_distance = get_max_distance(scene.camera.position, scene);
 	}
 
-	float pixel_width = 1.0f * aspect_ratio / static_cast<float>(screen_width);
-	float pixel_height = 1.0f / screen_height;
+	float rx = scene.camera.ry * aspect_ratio;
+	glm::vec3 camera_x = rx * (scene.camera.rotation * X_AXIS);
+	glm::vec3 camera_y = scene.camera.ry * (scene.camera.rotation * Y_AXIS);
+	glm::vec3 camera_z = scene.camera.rotation * Z_AXIS;
 
 	if (file.is_open()) {
 		file << "P3\n" << screen_width << ' ' << screen_height << "\n255\n";
 		for (int y = screen_height - 1; y >= 0; y--) {
 			for (int x = 0; x < screen_width; x++) {
-				glm::vec3 offset(pixel_width * x, pixel_height * y, 0.0f);
-				Ray ray(scene.camera.position, (scene.camera.front + offset) * 2.0f - 1.0f);
+				float dx = 2 * (x + 0.5f) / static_cast<float>(screen_width) - 1;
+				float dy = 2 * (y + 0.5f) / static_cast<float>(screen_height) - 1;
+				glm::vec3 origin = scene.camera.position;
+				glm::vec3 direction = dx * camera_x + dy * camera_y - camera_z;
+				Ray ray(origin, direction);
 				glm::vec3 color = Renderer::trace_ray(ray, scene);
 				file << static_cast<int>(color.r * RGB_MAX) << ' ' << static_cast<int>(color.g * RGB_MAX) << ' ' << static_cast<int>(color.b * RGB_MAX) << '\n';
 			}

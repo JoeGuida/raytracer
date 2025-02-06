@@ -5,6 +5,7 @@ enum class SceneTag {
 	HEIGHT,
 	BACKGROUND,
 	BOX,
+	CYLINDER,
 	SPHERE,
 	CAMERA,
 	AMBIENT_LIGHT,
@@ -13,110 +14,103 @@ enum class SceneTag {
 	NULL_SCENE_TAG
 };
 
-void exectue_command(const SceneTag& tag, const std::vector<std::string>& args, Scene& scene, bool flip_y_and_z_axis, bool invert_y_axis, bool invert_z_axis) {
+const std::unordered_map<std::string, SceneTag> scene_tags{
+	{"w", SceneTag::WIDTH},
+	{"h", SceneTag::HEIGHT},
+	{"bg", SceneTag::BACKGROUND},
+	{"box", SceneTag::BOX},
+	{"cylinder", SceneTag::CYLINDER},
+	{"sphere", SceneTag::SPHERE},
+	{"camera", SceneTag::CAMERA},
+	{"ambient", SceneTag::AMBIENT_LIGHT},
+	{"directional", SceneTag::DIRECTIONAL_LIGHT},
+	{"point", SceneTag::POINT_LIGHT}
+};
+
+void exectue_command(const SceneTag& tag, const std::vector<std::string>& args, Scene& scene) {
+	std::vector<float> floats;
+	std::vector<int> ints;
+
+	for (int i = 1; i < args.size(); i++) {
+		try {
+			float item = std::stof(args[i]);
+			floats.push_back(item);
+		}
+		catch (std::invalid_argument e) {
+			;
+		}
+
+		try {
+			int item = std::stoi(args[i]);
+			ints.push_back(item);
+		}
+		catch (std::invalid_argument e) {
+			;
+		}
+	}
+
 	switch (tag) {
 	case SceneTag::WIDTH: {
 		assert(args.size() == 1 + 1);
-		scene.width = std::stoi(args[1]);
+		scene.width = ints[0];
 		break;
 	}
 	case SceneTag::HEIGHT: {
 		assert(args.size() == 1 + 1);
-		scene.height = std::stoi(args[1]);
+		scene.height = ints[0];
 		break;
 	}
 	case SceneTag::BACKGROUND: {
 		assert(args.size() == 3 + 1);
-		scene.background_color = glm::vec3(
-			std::stof(args[1]),
-			std::stof(args[2]),
-			std::stof(args[3]));
+		scene.background_color = glm::vec3(floats[0], floats[1], floats[2]);
 		break;
 	}
 	case SceneTag::BOX: {
-		assert(args.size() == 10 + 1);
-		glm::vec3 min(std::stof(args[1]), std::stof(args[2]), std::stof(args[3]));
-		glm::vec3 max(std::stof(args[4]), std::stof(args[5]), std::stof(args[6]));
-
-		if (flip_y_and_z_axis) {
-			min = glm::vec3(min.x, min.z, min.y);
-			max = glm::vec3(max.x, max.z, max.y);
-		}
-
-		if (invert_y_axis) {
-			min.y *= -1.0f;
-			max.y *= -1.0f;
-		}
-		if (invert_z_axis) {
-			min.z *= -1.0f;
-			max.z *= -1.0f;
-		}
-		
-		glm::vec3 diffuse(std::stof(args[7]), std::stof(args[8]), std::stof(args[9]));
-		int specularity = std::stoi(args[10]);
-		Box* box = new Box(min, max, Material(diffuse, specularity));
+		assert(args.size() == 9 + 1);
+		glm::vec3 min(floats[0], floats[1], floats[2]);
+		glm::vec3 max(floats[3], floats[4], floats[5]);
+		glm::vec3 diffuse(floats[6], floats[7], floats[8]);
+		Box* box = new Box(min, max, Material(diffuse, 32));
 		scene.add(box);
 		break;
 	}
 	case SceneTag::CAMERA: {
-		assert(args.size() == 10 + 1);
-		float fov = std::stof(args[1]);
-		glm::vec3 pos(std::stof(args[2]), std::stof(args[3]), std::stof(args[4]));
-		glm::vec3 target(std::stof(args[5]), std::stof(args[6]), std::stof(args[7]));
-		glm::vec3 euler_rotation(std::stof(args[8]), std::stof(args[9]), std::stof(args[10]));
-		
-		if (flip_y_and_z_axis) {
-			pos = glm::vec3(pos.x, pos.z, pos.y);
-			target = glm::vec3(target.x, target.z, target.y);
-			euler_rotation = glm::vec3(euler_rotation.x, euler_rotation.z, euler_rotation.y);
-		}
-
-		if (invert_y_axis) {
-			pos.y *= -1.0f;
-			target.y *= -1.0f;
-			euler_rotation.y *= -1.0f;
-		}
-		if (invert_z_axis) {
-			pos.z *= -1.0f;
-			target.z *= -1.0f;
-			euler_rotation.z *= -1.0f;
-		}
-		
-		Camera camera(fov, pos, target - pos, euler_rotation);
-		scene.camera = camera;
+		assert(args.size() == 8 + 1);
+		glm::vec3 pos(floats[0], floats[1], floats[2]);
+		float ry = floats[3];
+		glm::quat rotation(floats[4], floats[5], floats[6], floats[7]);
+		Camera camera = Camera(pos, ry, rotation);
+		scene.add(camera);
 		break;
 	}
 	case SceneTag::SPHERE: {
-		assert(args.size() == 8 + 1);
-		float radius = std::stof(args[1]);
-		glm::vec3 center(std::stof(args[2]), std::stof(args[3]), std::stof(args[4]));
-		glm::vec3 diffuse(std::stof(args[5]), std::stof(args[6]), std::stof(args[7]));
-		int specularity = std::stoi(args[8]);
-
-		if (flip_y_and_z_axis) {
-			center = glm::vec3(center.x, center.z, center.y);
-		}
-
-		if (invert_y_axis) {
-			center.y *= -1.0f;
-		}
-		if (invert_z_axis) {
-			center.z *= -1.0f;
-		}
-
-		Sphere* sphere = new Sphere(center, radius, Material(diffuse, specularity));
+		assert(args.size() == 7 + 1);
+		glm::vec3 center(floats[0], floats[1], floats[2]);
+		float radius = floats[3];
+		glm::vec3 diffuse(floats[4], floats[5], floats[6]);
+		Sphere* sphere = new Sphere(center, radius, Material(diffuse, 32));
 		scene.add(sphere);
+		break;
+	}
+	case SceneTag::CYLINDER: {
+		assert(args.size() == 10 + 1);
+		glm::vec3 base(floats[0], floats[1], floats[2]);
+		glm::vec3 axis(floats[3], floats[4], floats[5]);
+		float radius = floats[6];
+		glm::vec3 diffuse(floats[7], floats[8], floats[9]);
+		Cylinder* cylinder = new Cylinder(base, axis, radius, Material(diffuse, 32));
+		scene.add(cylinder);
 		break;
 	}
 	case SceneTag::AMBIENT_LIGHT: {
 		assert(args.size() == 1 + 1);
-		scene.ambient += std::stof(args[1]);
+		scene.ambient = floats[0];
 		break;
 	}
 	case SceneTag::DIRECTIONAL_LIGHT: {
 		assert(args.size() == 4 + 1);
-		glm::vec3 direction(std::stof(args[1]), std::stof(args[2]), std::stof(args[3]));
-		float intensity = std::stof(args[4]);
+		glm::vec3 direction(floats[0], floats[1], floats[2]);
+		float intensity = floats[3];
 		DirectionalLight* directional_light = new DirectionalLight(direction, intensity);
 		scene.add(directional_light);
 		break;
@@ -135,32 +129,9 @@ void exectue_command(const SceneTag& tag, const std::vector<std::string>& args, 
 }
 
 SceneTag get_command(const std::string& value) {
-	if (value == "w") {
-		return SceneTag::WIDTH;
-	}
-	if (value == "h") {
-		return SceneTag::HEIGHT;
-	}
-	if (value == "bg") {
-		return SceneTag::BACKGROUND;
-	}
-	if (value == "box") {
-		return SceneTag::BOX;
-	}
-	if (value == "sphere") {
-		return SceneTag::SPHERE;
-	}
-	if (value == "camera") {
-		return SceneTag::CAMERA;
-	}
-	if (value == "ambient") {
-		return SceneTag::AMBIENT_LIGHT;
-	}
-	if (value == "directional") {
-		return SceneTag::DIRECTIONAL_LIGHT;
-	}
-	if (value == "point") {
-		return SceneTag::POINT_LIGHT;
+	auto it = scene_tags.find(value);
+	if (it != scene_tags.end()) {
+		return it->second;
 	}
 
 	return SceneTag::NULL_SCENE_TAG;
@@ -185,22 +156,20 @@ std::vector<std::string> split(const std::string& s, char delimiter) {
 	return split_string;
 }
 
-Scene Scene::load_from_file(const std::string& filepath, bool flip_y_and_z_axis, bool invert_y_axis, bool invert_z_axis) {
-	Scene scene;
+void Scene::load_from_file(const std::string& filepath, Scene& scene) {
 	std::ifstream file(filepath);
 	if (file.is_open()) {
 		std::string line;
 		while (std::getline(file, line)) {
 			std::vector<std::string> values = split(line, ' ');
-			if (values.size() < 1) { continue; }
-
+			if (values.size() < 1 || values[0][0] == '#') { continue; }
 			SceneTag tag = get_command(values[0]);
+
 			if (tag == SceneTag::NULL_SCENE_TAG) {
 				std::cout << "ERROR::Scene::load_from_file::ERROR_READING_FILE::INVALID_TAG: " << filepath << std::endl;
 			}
-			exectue_command(tag, values, scene, flip_y_and_z_axis, invert_y_axis, invert_z_axis);
+
+			exectue_command(tag, values, scene);
 		}
 	}
-
-	return scene;
 }

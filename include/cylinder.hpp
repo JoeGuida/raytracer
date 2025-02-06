@@ -25,11 +25,11 @@ public:
 	Cylinder(const glm::vec3& base, const glm::vec3& axis, float radius, const Material& material) : 
 		base(base), axis(axis), radius(radius), material(material) 
 	{
-		slab = Slab(glm::vec3(0.0f, 0.0f, 1.0f), 0, -glm::length(axis));
+		slab = Slab(glm::vec3(0.0f, 0.0f, 1.0f), 0.0f, -glm::length(axis));
 		glm::vec3 a = glm::normalize(axis);
 		glm::vec3 v(0.0f, 0.0f, 1.0f);
 
-		if (fabsf(glm::length(glm::cross(v, a))) < FLT_EPSILON) {
+		if (fabsf(glm::length(glm::cross(v, a)) - 0.0f) < FLT_EPSILON) {
 			v = glm::vec3(1.0f, 0.0f, 0.0f);
 		}
 

@@ -5,16 +5,13 @@ bool Cylinder::intersects(const Ray& ray, Hit& hit) const {
 		rotation_matrix * (ray.origin - base),
 		glm::vec3(0.0f));
 	rt.direction = rotation_matrix * ray.direction;
-	
 	Interval cap_interval = slab.intersection(ray);
-	if (cap_interval.t0 > cap_interval.t1 || fabsf(cap_interval.t1 - INFINITY) < FLT_EPSILON) {
-		return false;
-	}
 
 	float a = (rt.direction.x * rt.direction.x) + (rt.direction.y * rt.direction.y);
 	float b = 2 * ((rt.direction.x * rt.origin.x) + (rt.direction.y * rt.origin.y));
 	float c = (rt.origin.x * rt.origin.x) + (rt.origin.y * rt.origin.y) - (radius * radius);
 	float discriminant = (b * b) - (4 * a * c);
+	
 	if (discriminant < 0.0f) {
 		return false;
 	}
@@ -36,21 +33,21 @@ bool Cylinder::intersects(const Ray& ray, Hit& hit) const {
 		rt.origin.x + (t1 * rt.direction.x), 
 		rt.origin.y + (t1 * rt.direction.y), 
 		0.0f);
+	n0 = glm::transpose(rotation_matrix) * n0;
+	n1 = glm::transpose(rotation_matrix) * n1;
 
-	glm::vec3 point = ray.origin + ray.direction * t0;
 	Interval body_interval(t0, t1, n0, n1);
-	
 	Interval interval;
-	interval.t0 = (cap_interval.t0 > body_interval.t0) ? cap_interval.t0 : body_interval.t0;
-	interval.t1 = (cap_interval.t1 < body_interval.t1) ? cap_interval.t1 : body_interval.t1;
+	interval.t0 = std::max(cap_interval.t0, body_interval.t0);
+	interval.t1 = std::min(cap_interval.t1, body_interval.t1);
 
 	if (interval.t0 > interval.t1) {
 		return false;
 	}
 
 	hit.material = material;
-	hit.normal = glm::transpose(rotation_matrix) * interval.n0;
-	hit.point = point;
-	hit.t = t0;
+	hit.normal = interval.n0;
+	hit.point = ray.origin + ray.direction * interval.t0;
+	hit.t = interval.t0;
 	return true;
 }
