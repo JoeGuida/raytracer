@@ -21,7 +21,7 @@ bool Box::intersects(const Ray& ray, Hit& hit) const {
 		return false;
 	}
 
-	hit.material = material;
+	hit.material = &material;
 	hit.normal = interval.n0;
 	hit.point = ray.origin + ray.direction * interval.t0;
 	hit.t = interval.t0;

@@ -11,6 +11,7 @@ enum class SceneTag {
 	AMBIENT_LIGHT,
 	DIRECTIONAL_LIGHT,
 	POINT_LIGHT,
+	MESH,
 	NULL_SCENE_TAG
 };
 
@@ -24,7 +25,8 @@ const std::unordered_map<std::string, SceneTag> scene_tags{
 	{"camera", SceneTag::CAMERA},
 	{"ambient", SceneTag::AMBIENT_LIGHT},
 	{"directional", SceneTag::DIRECTIONAL_LIGHT},
-	{"point", SceneTag::POINT_LIGHT}
+	{"point", SceneTag::POINT_LIGHT},
+	{"mesh", SceneTag::MESH}
 };
 
 void exectue_command(const SceneTag& tag, const std::vector<std::string>& args, Scene& scene) {
@@ -93,13 +95,13 @@ void exectue_command(const SceneTag& tag, const std::vector<std::string>& args, 
 		break;
 	}
 	case SceneTag::CYLINDER: {
-		assert(args.size() == 10 + 1);
+		/*assert(args.size() == 10 + 1);
 		glm::vec3 base(floats[0], floats[1], floats[2]);
 		glm::vec3 axis(floats[3], floats[4], floats[5]);
 		float radius = floats[6];
 		glm::vec3 diffuse(floats[7], floats[8], floats[9]);
 		Cylinder* cylinder = new Cylinder(base, axis, radius, Material(diffuse, 32));
-		scene.add(cylinder);
+		scene.add(cylinder);*/
 		break;
 	}
 	case SceneTag::AMBIENT_LIGHT: {
@@ -121,6 +123,19 @@ void exectue_command(const SceneTag& tag, const std::vector<std::string>& args, 
 		float intensity = std::stof(args[4]);
 		PointLight* point_light = new PointLight(position, intensity);
 		scene.add(point_light);
+		break;
+	}
+	case SceneTag::MESH: {
+		assert(args.size() == 15 + 1);
+		std::string filepath = FileSystem::get_path("/scenes/" + args[1]);
+		glm::vec3 position(floats[0], floats[1], floats[2]);
+		glm::vec3 scale(floats[3], floats[3], floats[3]);
+		glm::quat rotation(floats[7], floats[8], floats[9], floats[10]);
+		glm::vec3 axis_rotation(floats[4], floats[5], floats[6]);
+		glm::vec3 diffuse(floats[11], floats[12], floats[13]);
+		Mesh mesh(position, scale, rotation, axis_rotation, Material(diffuse, 32));
+		mesh.load_from_file(filepath);
+		scene.add(mesh);
 		break;
 	}
 	default:

@@ -11,6 +11,10 @@ float Renderer::get_closest_object_hit(const std::vector<const Shape*>& objects,
 	float min_t = INFINITY;
 	for (const Shape* object : objects) {
 		if (object->intersects(ray, hit) && hit.t < min_t) {
+			auto tri = dynamic_cast<const Triangle*>(object);
+			if (tri) {
+				int sd = 4;
+			}
 			min_t = hit.t;
 		}
 	}
@@ -46,7 +50,7 @@ glm::vec3 Renderer::trace_ray(const Ray& ray, const Scene& scene) {
 		if(closest_t != INFINITY) {
 			switch (render_mode) {
 			case RenderMode::BASE_COLOR: {
-				return hit.material.color;
+				return hit.material->color;
 				break;
 			};
 			case RenderMode::DEPTH: {
@@ -58,11 +62,11 @@ glm::vec3 Renderer::trace_ray(const Ray& ray, const Scene& scene) {
 				break;
 			};
 			case RenderMode::BOUNDING_BOX: {
-				return hit.material.color;
+				return hit.material->color;
 				break;
 			};
 			case RenderMode::BLINN_PHONG: {
-				return calculate_blinn_phong(hit, scene) * hit.material.color;
+				return calculate_blinn_phong(hit, scene) * hit.material->color;
 				break;
 			}
 			}
@@ -121,7 +125,7 @@ float Renderer::calculate_diffuse(const glm::vec3& normal, const glm::vec3 light
 float Renderer::calculate_specular(const glm::vec3& light_direction, const glm::vec3 camera_position, const Hit& hit) {
 	glm::vec3 view_direction = camera_position - hit.point;
 	glm::vec3 h = glm::normalize(light_direction + view_direction);
-	float specular = std::powf(glm::dot(hit.normal, h), hit.material.specularity);
+	float specular = std::powf(glm::dot(hit.normal, h), static_cast<float>(hit.material->specularity));
 	return std::max(specular, 0.0f);
 }
 

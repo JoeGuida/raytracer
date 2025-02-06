@@ -6,12 +6,12 @@
 #include "material.hpp"
 
 struct Hit {
-	Material material;
+	const Material* material;
 	glm::vec3 normal;
 	glm::vec3 point;
 	float t;
 
-	Hit() : material(glm::vec3(0.0f), 32), normal(glm::vec3(0.0f)), point(glm::vec3(0.0f)), t(0.0f) {}
+	Hit() : material(nullptr), normal(glm::vec3(0.0f)), point(glm::vec3(0.0f)), t(0.0f) {}
 	Hit(const Hit&) = default;
 	Hit(Hit&&) = default;
 

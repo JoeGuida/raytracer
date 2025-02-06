@@ -1,10 +1,8 @@
 x64/
 x32/
+.vs/
+scenes/
 *.vcxproj
 *.vcxproj.*
 *.sln
-.vs/
 *.ppm
-*.ply
-*.x
-*.scene

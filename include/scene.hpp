@@ -4,7 +4,9 @@
 #include "box.hpp"
 #include "camera.hpp"
 #include "cylinder.hpp"
+#include "filesystem.hpp"
 #include "light.hpp"
+#include "mesh.hpp"
 #include "rendermode.hpp"
 #include "shape.hpp"
 #include "sphere.hpp"
@@ -38,6 +40,11 @@ public:
 	void add(const Camera& cam)   { camera = cam; }
 	void add(const Camera&& cam)  { camera = cam; }
 	void add(const Shape* shape)  { objects.push_back(shape); }
+	void add(const Mesh& mesh) {
+		for (const Shape* shape : mesh.triangles) {
+			objects.push_back(shape);
+		}
+	}
 	void add(const Light* light)  { lights.push_back(light); }
 
 	const std::vector<const Shape*> get_objects() const { return objects; }
