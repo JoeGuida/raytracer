@@ -7,19 +7,26 @@ float Renderer::max_distance = 0.0f;
 glm::vec3 Renderer::background_color = glm::vec3(0.1f, 0.1f, 0.1f);
 RenderMode Renderer::render_mode = RenderMode::BASE_COLOR;
 
-float Renderer::get_closest_object_hit(const std::vector<const Shape*>& objects, const Ray& ray, Hit& hit) {
+Hit Renderer::get_closest_object_hit(const std::vector<const Shape*>& objects, const Ray& ray, bool bounding_box) {
 	float min_t = INFINITY;
+	Hit min_hit;
 	for (const Shape* object : objects) {
-		if (object->intersects(ray, hit) && hit.t < min_t) {
-			auto tri = dynamic_cast<const Triangle*>(object);
-			if (tri) {
-				int sd = 4;
+		Hit hit;
+		if (bounding_box) {
+			if (object->aabb()->intersects(ray, hit) && hit.t < min_t) {
+				min_t = hit.t;
+				min_hit = hit;
 			}
-			min_t = hit.t;
+		}
+		else {
+			if (object->intersects(ray, hit) && hit.t < min_t) {
+				min_t = hit.t;
+				min_hit = hit;
+			}
 		}
 	}
 
-	return min_t;
+	return min_hit;
 }
 
 void Renderer::initialize(int width, int height, const glm::vec3 background_color, const RenderMode& mode) {
@@ -44,32 +51,30 @@ float get_max_distance(const glm::vec3 point, const Scene& scene) {
 
 glm::vec3 Renderer::trace_ray(const Ray& ray, const Scene& scene) {
 	std::vector<const Shape*> objects = scene.get_objects();
-	for (int i = 0; i < objects.size(); i++) {
-		Hit hit;
-		float closest_t = get_closest_object_hit(objects, ray, hit);
-		if(closest_t != INFINITY) {
-			switch (render_mode) {
-			case RenderMode::BASE_COLOR: {
-				return hit.material->color;
-				break;
-			};
-			case RenderMode::DEPTH: {
-				return glm::vec3(hit.t / max_distance, hit.t / max_distance, hit.t / max_distance);
-				break;
-			};
-			case RenderMode::NORMAL: {
-				return glm::vec3(fabsf(hit.normal.x), fabsf(hit.normal.y), fabsf(hit.normal.z));
-				break;
-			};
-			case RenderMode::BOUNDING_BOX: {
-				return hit.material->color;
-				break;
-			};
-			case RenderMode::BLINN_PHONG: {
-				return calculate_blinn_phong(hit, scene) * hit.material->color;
-				break;
-			}
-			}
+	Hit hit = get_closest_object_hit(objects, ray, render_mode == RenderMode::BOUNDING_BOX);
+
+	if(hit.t != INFINITY) {
+		switch (render_mode) {
+		case RenderMode::BASE_COLOR: {
+			return hit.material->color;
+			break;
+		};
+		case RenderMode::DEPTH: {
+			return glm::vec3(hit.t / max_distance, hit.t / max_distance, hit.t / max_distance);
+			break;
+		};
+		case RenderMode::NORMAL: {
+			return glm::vec3(fabsf(hit.normal.x), fabsf(hit.normal.y), fabsf(hit.normal.z));
+			break;
+		};
+		case RenderMode::BOUNDING_BOX: {
+			return glm::vec3(fabsf(hit.normal.x), fabsf(hit.normal.y), fabsf(hit.normal.z));
+			break;
+		};
+		case RenderMode::BLINN_PHONG: {
+			return calculate_blinn_phong(hit, scene) * hit.material->color;
+			break;
+		}
 		}
 	}
 

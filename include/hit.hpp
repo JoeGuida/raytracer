@@ -11,7 +11,7 @@ struct Hit {
 	glm::vec3 point;
 	float t;
 
-	Hit() : material(nullptr), normal(glm::vec3(0.0f)), point(glm::vec3(0.0f)), t(0.0f) {}
+	Hit() : material(nullptr), normal(glm::vec3(0.0f)), point(glm::vec3(0.0f)), t(INFINITY) {}
 	Hit(const Hit&) = default;
 	Hit(Hit&&) = default;
 

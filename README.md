@@ -23,5 +23,8 @@ Depth
 Normal
 ![Normal](img/normal.jpg?raw=true)
 
+Bounding Box
+![Bounding Box](img/bounding_box.jpg?raw=true)
+
 Blinn Phong
 ![Blinn Phong](img/blinn_phong.jpg?raw=true)

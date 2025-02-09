@@ -42,7 +42,7 @@ const std::unordered_map<std::string, ObjTag> obj_tags{
 	{"s", ObjTag::SMOOTHING_GROUP}
 };
 
-class Mesh {
+class Mesh : public Shape {
 private:
 	std::vector<glm::vec3> vertices;
 
@@ -51,17 +51,23 @@ public:
 	glm::vec3 position;
 	glm::vec3 scale;
 	glm::quat rotation;
-	glm::vec3 axis_rotation;
 	Material material;
+	BoundingBox* bounding_box;
 
-	Mesh(const glm::vec3& position, const glm::vec3& scale, const glm::quat& rotation, const glm::vec3& axis_rotation, const Material& material) :
-		position(position), scale(scale), rotation(rotation), axis_rotation(axis_rotation), material(material) {}
+	Mesh(const glm::vec3& position, const glm::vec3& scale, const glm::quat& rotation, const Material& material) :
+		position(position), scale(scale), rotation(rotation), material(material) {}
+
 	Mesh(const Mesh&) = default;
 	Mesh(Mesh&&) = default;
 	virtual ~Mesh() = default;
 
 	void exectue_command(const ObjTag& tag, const std::vector<std::string>& args);
 	void load_from_file(const std::string& filepath);
+
+	bool intersects(const Ray& ray, Hit& hit) const override;
+	Material get_material() const override { return material; };
+	glm::vec3 get_pos() const override { return position; };
+	BoundingBox* aabb() const { return bounding_box; }
 };
 
 #endif

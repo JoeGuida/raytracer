@@ -26,9 +26,6 @@ void Mesh::exectue_command(const ObjTag& tag, const std::vector<std::string>& ar
 	case ObjTag::VERTEX: {
 		assert(floats.size() == 3);
 		glm::vec3 v = glm::vec3(floats[0], floats[1], floats[2]);
-		v = glm::rotateX(v, glm::radians(axis_rotation.x));
-		v = glm::rotateY(v, glm::radians(axis_rotation.y));
-		v = glm::rotateZ(v, glm::radians(axis_rotation.z));
 		v = v * scale + position;
 		vertices.push_back(v);
 		break;
@@ -105,4 +102,34 @@ void Mesh::load_from_file(const std::string& filepath) {
 			exectue_command(tag, values);
 		}
 	}
+
+	glm::vec3 min(0.0f);
+	glm::vec3 max(0.0f);
+	for (const glm::vec3& vertex : vertices) {
+		min.x = std::min(vertex.x, min.x);
+		min.y = std::min(vertex.y, min.y);
+		min.z = std::min(vertex.z, min.z);
+		max.x = std::max(vertex.x, max.x);
+		max.y = std::max(vertex.y, max.y);
+		max.z = std::max(vertex.z, max.z);
+	}
+
+	glm::vec3 range = max - min;
+
+	bounding_box = new BoundingBox(
+		glm::vec3(min.x, min.y, min.z), 
+		glm::vec3(max.x, max.y, max.z));
+}
+
+bool Mesh::intersects(const Ray& ray, Hit& hit) const {
+	bool hit_found = false;
+	for (const Shape* shape : triangles) {
+		Hit subhit;
+		if (shape->intersects(ray, subhit) && subhit.t < hit.t) {
+			hit = subhit;
+			hit_found = true;
+		}
+	}
+
+	return hit_found;
 }

@@ -3,6 +3,7 @@
 
 #include "glm/mat3x3.hpp"
 
+#include "bounding_box.hpp"
 #include "hit.hpp"
 #include "interval.hpp"
 #include "material.hpp"
@@ -12,7 +13,7 @@
 
 class Cylinder : public Shape {
 private:
-	glm::mat3x3 rotation_matrix;
+	glm::mat3x3 R;
 	Slab slab;
 
 public:
@@ -20,7 +21,7 @@ public:
 	glm::vec3 axis;
 	float radius;
 	Material material;
-
+	BoundingBox* bounding_box;
 
 	Cylinder(const glm::vec3& base, const glm::vec3& axis, float radius, const Material& material) : 
 		base(base), axis(axis), radius(radius), material(material) 
@@ -36,7 +37,12 @@ public:
 		glm::vec3 b = glm::normalize(glm::cross(v, a));
 		glm::vec3 c = glm::cross(a, b);
 		glm::mat3x3 Rt = { b, c, a };
-		rotation_matrix = glm::transpose(Rt);
+		R = glm::transpose(Rt);
+
+		glm::vec3 ba = base + axis;
+		bounding_box = new BoundingBox(
+			glm::vec3(base.x - radius, base.y - radius, base.z + radius),
+			glm::vec3(ba.x + radius, ba.y + radius, ba.z - radius));
 	}
 
 	Cylinder(const Cylinder&) = default;
@@ -46,6 +52,7 @@ public:
 	bool intersects(const Ray& ray, Hit& hit) const override;
 	Material get_material() const override { return material; }
 	glm::vec3 get_pos() const override { return base; }
+	BoundingBox* aabb() const override { return bounding_box; }
 };
 
 #endif

@@ -5,19 +5,14 @@ bool Box::intersects(const Ray& ray, Hit& hit) const {
 
 	for (const Slab& slab : slabs) {
 		Interval i = slab.intersection(ray);
-
-		if (i.t0 > interval.t0) {
-			interval.t0 = i.t0;
-			interval.n0 = i.n0;
-		}
-
-		if (i.t1 < interval.t1) {
-			interval.t1 = i.t1;
-			interval.n1 = i.n1;
-		}
+		interval.calculate(interval, i);
 	}
 
 	if (interval.t0 > interval.t1) {
+		return false;
+	}
+
+	if (interval.t0 < 0.0f && interval.t1 < 0.0f) {
 		return false;
 	}
 

@@ -20,7 +20,7 @@ private:
 	static RenderMode render_mode;
 
 public:
-	static float get_closest_object_hit(const std::vector<const Shape*>& objects, const Ray& ray, Hit& hit);
+	static Hit get_closest_object_hit(const std::vector<const Shape*>& objects, const Ray& ray, bool bounding_box = false);
 	static void initialize(int width, int height, const glm::vec3 background_color, const RenderMode& mode);
 	static glm::vec3 trace_ray(const Ray& ray, const Scene& scene);
 	static void raytrace_image(std::ofstream& file, const Scene& scene);

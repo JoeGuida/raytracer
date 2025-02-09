@@ -26,6 +26,26 @@ struct Interval {
 		return *this;
 	}
 
+	void calculate(const Interval& a, const Interval& b) {
+		if (a.t0 > b.t0) {
+			t0 = a.t0;
+			n0 = a.n0;
+		}
+		else {
+			t0 = b.t0;
+			n0 = b.n0;
+		}
+
+		if (a.t1 < b.t1) {
+			t1 = a.t1;
+			n1 = a.n1;
+		}
+		else {
+			t1 = b.t1;
+			n1 = b.n1;
+		}
+	}
+
 	void swap() {
 		float temp = t0;
 		t0 = t1;
