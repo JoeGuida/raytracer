@@ -1,0 +1,5 @@
+[2025-02-12 14:41:22.489] [logger] [debug] Elapsed Time: 8.4941695
+[2025-02-12 14:41:58.882] [logger] [debug] Elapsed Time: 8.9987857
+[2025-02-12 14:42:19.750] [logger] [debug] Elapsed Time: 8.4525556
+[2025-02-12 14:42:30.774] [logger] [debug] Elapsed Time: 8.4286104
+[2025-02-12 14:42:42.093] [logger] [debug] Elapsed Time: 8.2589556

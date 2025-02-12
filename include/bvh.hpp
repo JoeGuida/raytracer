@@ -13,12 +13,9 @@
 
 #include <vector>
 
-using Scalar = float;
-using Tri = bvh::v2::Tri<Scalar, 3>;
-
 class BVH {
 public:
-	std::vector<Tri> tris;
+	std::vector<bvh::v2::Tri<float, 3>> tris;
 
 	BVH() {}
 };
